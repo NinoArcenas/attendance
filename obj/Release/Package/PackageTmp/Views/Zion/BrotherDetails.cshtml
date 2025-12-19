@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "BrotherDetails";
+
+    ////return list from header
+    //int idsabrother = 0;
+    //var HeadList = AttendanceManagementSystem.Controllers.ZionController.BrotherList();
+
+    //foreach (var he in HeadList)
+    //{
+    //    idsabrother = he.id;
+    //}
+
+    //var Employeelisting = TADTitleConversion.Controllers.ZionController.BrotherListing(); //ViewBag.id means id
+
+}
+
+<br />
+<body class="background-White" style="background-color:white">
+    <div class="widget-body" style="background-color:white">
+        <div class="col-xs-12 col-sm-12">
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#tab_Information" id="Information-tab" role="tab" data-toggle="tab" aria-expanded="true">Information</a>
+                                
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#tab_Schedule" role="tab" id="Schedule-tab" data-toggle="tab" aria-expanded="false">Schedule</a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#tab_Subject" role="tab" id="Subject-tab" data-toggle="tab" aria-expanded="false">Subject</a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#tab_Status" role="tab" id="Status-tab" data-toggle="tab" aria-expanded="false">Status</a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#tab_Attendance" role="tab" id="Attendance-tab" data-toggle="tab" aria-expanded="false">Attendance</a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div role="tabpanel" class="tab-pane active " id="tab_Information" aria-labelledby="Information-tab">
+                                <div class="x_title">
+                                    <h2>Brother Information</h2>
+                                </div>
+                                <!-- start user projects -->
+                                <table id="BrotherInformationTable" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>ID</th>
+                                            <th>First Name</th>
+                                            <th>Middle Name</th>
+                                            <th>Last Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--recode-->
+                                        @*@{
+                                            foreach (var bro in ViewBag.Brothers)
+                                            {
+                                                <tr>
+                                                    <td style="text-align:center" hidden>
+                                                        <label>
+                                                            @bro.id
+                                                        </label>
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <label>
+                                                            @bro.fname
+                                                        </label>
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <label>
+                                                            @bro.mname
+                                                        </label>
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <label>
+                                                            @bro.lname
+                                                        </label>
+                                                    </td>                                                    
+                                                </tr>
+                                            }
+                                        }*@
+                                        <!--end recode-->
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+                            <div role="tabpanel" class="tab-pane fade" id="tab_Schedule" aria-labelledby="Schedule-tab">
+                                <div class="x_title">
+                                    <h2>Schedule</h2>
+                                </div>
+                                <!-- start user projects -->
+                                <table id="employeelistingLicenseTable" class="data table table-striped no-margin">
+                                    <thead style="background-color:cadetblue">
+                                        <tr style="color:white">
+                                            <th>Type of License</th>
+                                            <th>License Name</th>
+                                            <th>Expiration Date</th>
+                                            <th>Attached File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="employeelistingLicenseTableBody">
+                                        <!--recode-->
+                                        <!--end recode-->
+                                    </tbody>
+                                </table>
+                                <!-- end user projects -->
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane fade" id="tab_Subject" aria-labelledby="Subject-tab">
+                                <div class="x_title">
+                                    <h2>Subject</h2>
+                                </div>
+                                <!-- start user projects -->
+                                <table id="employeelistingCertificateTable" class="data table table-striped no-margin">
+                                    <thead style="background-color:cadetblue">
+                                        <tr style="color:white">
+                                            <th>Type of Certificate</th>
+                                            <th>Certificate Name</th>
+                                            <th>Expiration Date</th>
+                                            <th>Attached File</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="employeelistingCertificateTableBody">
+                                        <!--recode-->
+                                        <!--end recode-->
+                                    </tbody>
+                                </table>
+                                <!-- end user projects -->
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane fade" id="tab_Status" aria-labelledby="Status-tab">
+
+                                <div class="x_title">
+                                    <h2>Status</h2>
+                                </div>
+                                <!-- start user projects -->
+                                <table id="employeelistingSkillSetTable" class="data table table-striped no-margin">
+                                    <thead style="background-color:cadetblue">
+                                        <tr style="color:white">
+                                            <th>Ref #</th>
+                                            <th>Type of Skill Set</th>
+                                            <th>Skill Set Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="employeelistingSkillSetTableBody">
+                                    </tbody>
+                                </table>
+                                <!-- end user projects -->
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane fade" id="tab_Attendance" aria-labelledby="Attendance-tab">
+                                <div class="x_title">
+                                    <h2>Attendance</h2>
+                                    <div class="clearfix"></div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            //$("#BrotherInformationTable").DataTable();
+
+        });
+
+    </script>
+}

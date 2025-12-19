@@ -1,0 +1,611 @@
+﻿
+@{
+    ViewBag.Title = "Aging_Report";
+}
+
+<div class="widget-body" style="background-color:white">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="widget-box widget-color-blue3">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            Summary
+                            <div class="widget-toolbar" style="display:none">
+                                <div class="pull-center">
+                                    <a class="badge btn btn-xs btn-pink btn-round btn-bold no-hover" id="exportButton">
+                                        <i class="ace-icon glyphicon glyphicon-file"></i>
+                                        Export to Excel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <table id="TblSummary" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center" colspan="3" style="color: white; background-color:cornflowerblue">ACCOUNT INFO</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">PRE-BIR</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">BIR SUBMISSION</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">BIR RELEASED</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">PRE-ROD SUBMISSION</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">ROD RELEASED</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">PRE- ASSESSOR SUBMISSION</th>
+                                    <th class="center" colspan="3" style="color: white; background-color: cornflowerblue ">ASSESSOR RELEASED</th>
+                                </tr>
+                                <tr>
+                                    <th class="center" style="color: black; Background: deepskyblue">Account Name</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Unit No</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Financing</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="TblSummaryBody">
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="widget-box widget-color-blue3">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            Month Wise Summary
+                        </div>
+                    </div>
+                    <div>
+                        <table id="MonthSummary" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue"></th>
+                                    <th class="center" colspan="2" style="color: white; background-color: cornflowerblue ">PRE-BIR</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue">BIR SUBMISSION</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue">BIR RELEASED</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue">PRE-ROD SUBMISSION</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue">ROD RELEASED</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue">PRE- ASSESSOR SUBMISSION</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue">ASSESSOR RELEASED</th>
+                                    <th class="center" colspan="2" style="color: white; background-color:cornflowerblue"></th>
+                                </tr>
+                                <tr>
+                                    <th class="center" style="color: black; Background: deepskyblue">Year</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Month</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Projected</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">Actual</th>
+                                    <th class="center" style="color: black; Background: deepskyblue">TOTAL (per month)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="MonthSummaryBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+
+            //format date to table summary
+            function formatDate(dateString) {
+                if (!dateString) return ''; // Return empty string if dateString is undefined or null
+
+                var dateString1 = dateString.substr(6); // Assuming dateString format is "/Date(1720627200000)/"
+                var currentTime = new Date(parseInt(dateString1));
+                var monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var month = monthNames[currentTime.getMonth()];
+                var day = currentTime.getDate();
+                var year = currentTime.getFullYear();
+
+                return month + ' ' + day + ', ' + year;
+            }
+
+            //start table month wise summary
+            var urlDashboardAccounting = "/Home/AgingTADConversion";
+            $.get(urlDashboardAccounting, function (data) {
+                var rows = '';
+                var tableData = [];
+                $.each(data, function (index, dashboard) {
+                    var row = [];
+                    var prebirprojected = formatDate(dashboard.PRE_BIR_PROJECTED);
+                    var prebiractual = formatDate(dashboard.PRE_BIR_ACTUAL);
+                    var prebirstatus = dashboard.PRE_BIR_STATUS;
+                    var birsubprojected = formatDate(dashboard.BIR_SUBMISSION_PRJECTED);
+                    var birsubactual = formatDate(dashboard.BIR_SUBMISSION_ACTUAL);
+                    var birsubstatus = dashboard.BIR_SUBMISSION_STATUS;
+                    var birreaprojected = formatDate(dashboard.BIR_RELEASE_PROJECTED);
+                    var birreaactual = formatDate(dashboard.BIR_RELEASE_ACTUAL);
+                    var birreastatus = dashboard.BIR_RELEASE_STATUS;
+                    var prerodsubprojected = formatDate(dashboard.PRE_ROD_SUBMISION_PROJECTED);
+                    var prerodsubactual = formatDate(dashboard.PRE_ROD_SUBMISION_ACTUAL);
+                    var prerodsubstatus = dashboard.PRE_ROD_SUBMISSION_STATUS;
+                    var rodrealprojected = formatDate(dashboard.ROD_RELEASE_PROJECTED);
+                    var rodrealactual = formatDate(dashboard.ROD_RELEASE_ACTUAL);
+                    var rodrealstatus = dashboard.ROD_RELEASE_STATUS;
+                    var preassprojected = formatDate(dashboard.PRE_ASSESSOR_SUBMISSION_PROJECTED);
+                    var preassactual = formatDate(dashboard.PRE_ASSESSOR_SUBMISSION_ACTUAL);
+                    var preassstatus = dashboard.PRE_ASSESSOR_SUBMISSION_STATUS;
+                    var assreaprojected = formatDate(dashboard.ASSESSOR_RELEASE_PROJECTED);
+                    var assreaactual = formatDate(dashboard.ASSESSOR_RELEASE_ACTUAL);
+                    var assreastatus = dashboard.ASSESSOR_RELEASE_STATUS;
+
+                    rows += "<tr style='text-align:center'>";
+                    rows += "<td>" + (dashboard.ACCOUNT_NAME || '') + "</td>";
+                    rows += "<td>" + (dashboard.UNIT_NO || '') + "</td>";
+                    rows += "<td>" + (dashboard.FINANCING || '') + "</td>";
+
+                    rows += "<td>" + (prebirprojected || '') + "</td>";
+                    rows += "<td>" + (prebiractual || '') + "</td>";
+                    rows += "<td>" + (prebirstatus) + "</td>";
+
+                    rows += "<td>" + (birsubprojected || '') + "</td>";
+                    rows += "<td>" + (birsubactual || '') + "</td>";
+                    rows += "<td>" + (birsubstatus) + "</td>";
+
+                    rows += "<td>" + (birreaprojected || '') + "</td>";
+                    rows += "<td>" + (birreaactual || '') + "</td>";
+                    rows += "<td>" + (birreastatus) + "</td>";
+
+                    rows += "<td>" + (prerodsubprojected || '') + "</td>";
+                    rows += "<td>" + (prerodsubactual || '') + "</td>";
+                    rows += "<td>" + (prerodsubstatus) + "</td>";
+
+                    rows += "<td>" + (rodrealprojected || '') + "</td>";
+                    rows += "<td>" + (rodrealactual || '') + "</td>";
+                    rows += "<td>" + (rodrealstatus) + "</td>";
+
+                    rows += "<td>" + (preassprojected || '') + "</td>";
+                    rows += "<td>" + (preassactual || '') + "</td>";
+                    rows += "<td>" + (preassstatus) + "</td>";
+
+                    rows += "<td>" + (assreaprojected || '') + "</td>";
+                    rows += "<td>" + (assreaactual || '') + "</td>";
+                    rows += "<td>" + (assreastatus) + "</td>";
+
+                    rows += "</tr>";
+
+                    // Add row to tableData for Excel export
+                    row.push(dashboard.ACCOUNT_NAME || '');
+                    row.push(dashboard.UNIT_NO || '');
+                    row.push(dashboard.FINANCING || '');
+                    row.push(prebirprojected || '');
+                    row.push(prebiractual || '');
+                    row.push(prebirstatus);
+                    row.push(birsubprojected || '');
+                    row.push(birsubactual || '');
+                    row.push(birsubstatus);
+                    row.push(birreaprojected || '');
+                    row.push(birreaactual || '');
+                    row.push(birreastatus);
+                    row.push(prerodsubprojected || '');
+                    row.push(prerodsubactual || '');
+                    row.push(prerodsubstatus);
+                    row.push(rodrealprojected || '');
+                    row.push(rodrealactual || '');
+                    row.push(rodrealstatus);
+                    row.push(preassprojected || '');
+                    row.push(preassactual || '');
+                    row.push(preassstatus);
+                    row.push(assreaprojected || '');
+                    row.push(assreaactual || '');
+                    row.push(assreastatus);
+
+                    tableData.push(row);
+                });
+                $('.TblSummaryBody').html(rows);
+
+                // Export button click handler
+                $('#exportButton').on('click', function () {
+                    var ws = XLSX.utils.aoa_to_sheet([
+                        ["Account Name", "Unit No", "Financing", "PRE_BIR_PROJECTED", "PRE_BIR_ACTUAL", "PRE_BIR_STATUS",
+                            "BIR_SUBMISSION_PROJECTED", "BIR_SUBMISSION_ACTUAL", "BIR_SUBMISSION_STATUS", "BIR_RELEASE_PROJECTED",
+                            "BIR_RELEASE_ACTUAL", "BIR_RELEASE_STATUS", "PRE_ROD_SUBMISSION_PROJECTED", "PRE_ROD_SUBMISSION_ACTUAL",
+                            "PRE_ROD_SUBMISSION_STATUS", "ROD_RELEASE_PROJECTED", "ROD_RELEASE_ACTUAL", "ROD_RELEASE_STATUS",
+                            "PRE_ASSESSOR_SUBMISSION_PROJECTED", "PRE_ASSESSOR_SUBMISSION_ACTUAL", "PRE_ASSESSOR_SUBMISSION_STATUS",
+                            "ASSESSOR_RELEASE_PROJECTED", "ASSESSOR_RELEASE_ACTUAL", "ASSESSOR_RELEASE_STATUS"] // Table headers
+                    ].concat(tableData)); // Add data below headers
+
+                    var wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Aging Report Summary");
+
+                    // Export Excel file
+                    XLSX.writeFile(wb, "AgingReportSummary.xlsx");
+                });
+
+            }).done(function () {
+                $('#TblSummary').DataTable({
+                    scrollY: '550px', // Set the maximum height of the table body
+                    scrollX: true, // Enable horizontal scrolling
+                    scrollCollapse: true, // Allow the table to collapse if fewer rows are displayed
+                    paging: true, // Disable pagination
+                    fixedHeader: true // Enable fixed header
+                });
+            });
+
+            function formatCustomDateString(customDateString) {
+                // Extract the timestamp from the custom date string
+                const timestamp = parseInt(customDateString.match(/\d+/)[0]);
+                // Create a new Date object using the timestamp
+                const date = new Date(timestamp);
+                // Define an array of month names
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                // Get the full year and month name
+                const year = date.getFullYear();
+                const month = monthNames[date.getMonth()];
+                // Return the formatted date
+                return `${year} ${month}`;
+            }
+
+            //PRE-BIR Actual
+            var strfullpaymentdate = "";
+            var GetFullPaymentDate = "/Home/GetFullPaymentDate";
+            $.get(GetFullPaymentDate, function (datafullpaymentdate) {
+                $.each(datafullpaymentdate, function (index, fullpayment) {
+                    strfullpaymentdate += formatCustomDateString(fullpayment) + ",";
+                });
+            });
+
+            //BIR SUBMISSION Projected
+            var strsubmissiondateprojected30 = "";
+            var GetSubmissionDateProjected30 = "/Home/GetSubmissionDateProjected30";
+            $.get(GetSubmissionDateProjected30, function (submissiondateprojected30) {
+                $.each(submissiondateprojected30, function (index, birsubpro) {
+                    strsubmissiondateprojected30 += formatCustomDateString(birsubpro) + ",";
+                });
+            });
+
+            //BIR SUBMISSION Actual
+            var strsubmissiondateactual = "";
+            var GetSubmissionDateActual = "/Home/GetSubmissionDateActual";
+            $.get(GetSubmissionDateActual, function (submissiondateactual) {
+                $.each(submissiondateactual, function (index, birsubact) {
+                    strsubmissiondateactual += formatCustomDateString(birsubact) + ",";
+                });
+            });
+
+            //BIR RELEASE Projected
+            var strbirrealeasedprojecte90 = "";
+            var GetBirRealeasedProjected90 = "/Home/GetBirRealeasedProjected90";
+            $.get(GetBirRealeasedProjected90, function (birrealeasedprojecte90) {
+                $.each(birrealeasedprojecte90, function (index, birrealpro) {
+                    strbirrealeasedprojecte90 += formatCustomDateString(birrealpro) + ",";
+                });
+            });
+
+            //BIR RELEASE Actual
+            var strbirrealeasedactual = "";
+            var GetReleasedDateBirActual = "/Home/GetReleasedDateBirActual";
+            $.get(GetReleasedDateBirActual, function (birrealeasedactual) {
+                $.each(birrealeasedactual, function (index, birrealact) {
+                    strbirrealeasedactual += formatCustomDateString(birrealact) + ",";
+                });
+            });
+
+            //PRE-ROD SUBMISSION Projected
+            var strprerodsubprojected45 = "";
+            var GetPreRodSubProjected45 = "/Home/GetPreRodSubProjected45";
+            $.get(GetPreRodSubProjected45, function (prerodsubpro) {
+                $.each(prerodsubpro, function (index, prerodsubprojec) {
+                    strprerodsubprojected45 += formatCustomDateString(prerodsubprojec) + ",";
+                });
+            });
+
+            //PRE-ROD SUBMISSION Actual
+            var strdatesubmittedrodactual = "";
+            var GetDateSubmittedRod = "/Home/GetDateSubmittedRod";
+            $.get(GetDateSubmittedRod, function (prerodsubactual) {
+                $.each(prerodsubactual, function (index, prerodsubact) {
+                    strdatesubmittedrodactual += formatCustomDateString(prerodsubact) + ",";
+                });
+            });
+
+            //ROD RELEASED Projected
+            var strrodsubprojected = "";
+            var GetRodSubProjected60 = "/Home/GetRodSubProjected60";
+            $.get(GetRodSubProjected60, function (rodrealprojected) {
+                $.each(rodrealprojected, function (index, rodsubpro) {
+                    strrodsubprojected += formatCustomDateString(rodsubpro) + ",";
+                });
+            });
+
+            //ROD RELEASED Actual
+            var strdatereleasedrodactual = "";
+            var GetDateReleasedRod = "/Home/GetDateReleasedRod";
+            $.get(GetDateReleasedRod, function (rodrealactual) {
+                $.each(rodrealactual, function (index, rodrealact) {
+                    strdatereleasedrodactual += formatCustomDateString(rodrealact) + ",";
+                });
+            });
+
+            //PRE- ASSESSOR SUBMISSION Projected
+            var strpreasssubprojected = "";
+            var GetPreAssSubProjected15 = "/Home/GetPreAssSubProjected15";
+            $.get(GetPreAssSubProjected15, function (preasssubprojected) {
+                $.each(preasssubprojected, function (index, preasssubpro) {
+                    strpreasssubprojected += formatCustomDateString(preasssubpro) + ",";
+                });
+            });
+
+            //PRE- ASSESSOR SUBMISSION Actual
+            var strdatesubmittedpreassessorsactual = "";
+            var GetDateSubmittedPreassessors = "/Home/GetDateSubmittedPreassessors";
+            $.get(GetDateSubmittedPreassessors, function (datesubmittedpreassessorsactual) {
+                $.each(datesubmittedpreassessorsactual, function (index, datesubmittedpreassessorsact) {
+                    strdatesubmittedpreassessorsactual += formatCustomDateString(datesubmittedpreassessorsact) + ",";
+                });
+            });
+
+            //ASSESSOR RELEASED Projected
+            var strassrelprojected = "";
+            var GetAssRelProjected60 = "/Home/GetAssRelProjected60";
+            $.get(GetAssRelProjected60, function (assrelprojected) {
+                $.each(assrelprojected, function (index, assrelpro) {
+                    strassrelprojected += formatCustomDateString(assrelpro) + ",";
+                });
+            });
+
+            //ASSESSOR RELEASED Actual
+            var strdatereleasedassessorsactual = "";
+            var GetDateReleasedAssessors = "/Home/GetDateReleasedAssessors";
+            $.get(GetDateReleasedAssessors, function (datereleasedassessorsactual) {
+                $.each(datereleasedassessorsactual, function (index, datereleasedassessorsact) {
+                    strdatereleasedassessorsactual += formatCustomDateString(datereleasedassessorsact) + ",";
+                });
+            });
+
+            //Get Year and Month
+            var urlDashboardAccounting = "/Home/GetYearMonths";
+            $.get(urlDashboardAccounting, function (data) {
+                var rows = '';
+                $.each(data, function (index, dashboard) {
+                    //PRE-BIR Actual
+                    let countfullpaymentdate = 0;
+                    let year = dashboard.Year;
+                    let month = dashboard.Months;
+                    var stryearmonth = strfullpaymentdate;
+                    let lines = stryearmonth.split(',');
+                    lines.forEach(line => {
+                        if (line.includes(`${year} ${month}`)) {
+                            countfullpaymentdate++;
+                        }
+                    });
+                    //BIR SUBMISSION Projected
+                    let countsubmissiondatepro = 0;
+                    let yearbirsubpro = dashboard.Year;
+                    let monthbirsubpro = dashboard.Months;
+                    var stryearmonthsubmissiondateprojected30 = strsubmissiondateprojected30;
+                    let linesbirsubpro = stryearmonthsubmissiondateprojected30.split(',');
+                    linesbirsubpro.forEach(line => {
+                        if (line.includes(`${yearbirsubpro} ${monthbirsubpro}`)) {
+                            countsubmissiondatepro++;
+                        }
+                    });
+                    //BIR SUBMISSION Actual
+                    let countsubmissiondateact = 0;
+                    let yearbirsubact = dashboard.Year;
+                    let monthbirsubact = dashboard.Months;
+                    var stryearmonthsubmissiondateactual = strsubmissiondateactual;
+                    let linesbirsubact = stryearmonthsubmissiondateactual.split(',');
+                    linesbirsubact.forEach(line => {
+                        if (line.includes(`${yearbirsubact} ${monthbirsubact}`)) {
+                            countsubmissiondateact++;
+                        }
+                    });
+                    //BIR RELEASE Projected
+                    let countbirrealeasedprojected = 0;
+                    let yearbirrealpro = dashboard.Year;
+                    let monthbirrealpro = dashboard.Months;
+                    var stryearmonthbirrealeasedprojected = strbirrealeasedprojecte90;
+                    let linesbirrealpro = stryearmonthbirrealeasedprojected.split(',');
+                    linesbirrealpro.forEach(line => {
+                        if (line.includes(`${yearbirrealpro} ${monthbirrealpro}`)) {
+                            countbirrealeasedprojected++;
+                        }
+                    });
+                    //BIR RELEASE Actual
+                    let countbirrealeasedactual = 0;
+                    let yearbirrealact = dashboard.Year;
+                    let monthbirrealact = dashboard.Months;
+                    var stryearmonthbirrealeasedactual = strbirrealeasedactual;
+                    let linesbirrealact = stryearmonthbirrealeasedactual.split(',');
+                    linesbirrealact.forEach(line => {
+                        if (line.includes(`${yearbirrealact} ${monthbirrealact}`)) {
+                            countbirrealeasedactual++;
+                        }
+                    });
+                    //PRE-ROD SUBMISSION Projected
+                    let countprerodsubprojected = 0;
+                    let yearprerodsubpro = dashboard.Year;
+                    let monthprerodsubpro = dashboard.Months;
+                    var stryearmonthprerodsubprojected = strprerodsubprojected45;
+                    let linesprerodsubpro = stryearmonthprerodsubprojected.split(',');
+                    linesprerodsubpro.forEach(line => {
+                        if (line.includes(`${yearprerodsubpro} ${monthprerodsubpro}`)) {
+                            countprerodsubprojected++;
+                        }
+                    });
+                    //PRE-ROD SUBMISSION Actual
+                    let countdatesubmittedrodactual = 0;
+                    let yeardatesubmittedrodact = dashboard.Year;
+                    let monthdatesubmittedrodact = dashboard.Months;
+                    var stryearmonthdatesubmittedrodactual = strdatesubmittedrodactual;
+                    let linesdatesubmittedrodact = stryearmonthdatesubmittedrodactual.split(',');
+                    linesdatesubmittedrodact.forEach(line => {
+                        if (line.includes(`${yeardatesubmittedrodact} ${monthdatesubmittedrodact}`)) {
+                            countdatesubmittedrodactual++;
+                        }
+                    });
+                    //ROD RELEASED Projected
+                    let countrodsubprojected = 0;
+                    let yearrodsubprojected = dashboard.Year;
+                    let monthrodsubprojected = dashboard.Months;
+                    var stryearmonthrodsubprojected = strrodsubprojected;
+                    let linesrodsubprojected = stryearmonthrodsubprojected.split(',');
+                    linesrodsubprojected.forEach(line => {
+                        if (line.includes(`${yearrodsubprojected} ${monthrodsubprojected}`)) {
+                            countrodsubprojected++;
+                        }
+                    });
+                    //ROD RELEASED Actual
+                    let countdatereleasedrodactual = 0;
+                    let yeardaterealdrodactual = dashboard.Year;
+                    let monthdaterealdrodactual = dashboard.Months;
+                    var stryearmonthdaterealdrodactual = strdatereleasedrodactual;
+                    let linesdaterealdrodactual = stryearmonthdaterealdrodactual.split(',');
+                    linesdaterealdrodactual.forEach(line => {
+                        if (line.includes(`${yeardaterealdrodactual} ${monthdaterealdrodactual}`)) {
+                            countdatereleasedrodactual++;
+                        }
+                    });
+                    //PRE- ASSESSOR SUBMISSION Projected
+                    let countpreasssubprojected = 0;
+                    let yearpreasssubprojected = dashboard.Year;
+                    let monthpreasssubprojected = dashboard.Months;
+                    var stryearmonthpreasssubprojected = strpreasssubprojected;
+                    let linespreasssubprojected = stryearmonthpreasssubprojected.split(',');
+                    linespreasssubprojected.forEach(line => {
+                        if (line.includes(`${yearpreasssubprojected} ${monthpreasssubprojected}`)) {
+                            countpreasssubprojected++;
+                        }
+                    });
+                    //PRE- ASSESSOR SUBMISSION Actual
+                    let countdatesubmittedpreassessorsactual = 0;
+                    let yeardatesubmittedpreassessorsactual = dashboard.Year;
+                    let monthdatesubmittedpreassessorsactual = dashboard.Months;
+                    var stryearmonthdatesubmittedpreassessorsactual = strdatesubmittedpreassessorsactual;
+                    let linesdatesubmittedpreassessorsactual = stryearmonthdatesubmittedpreassessorsactual.split(',');
+                    linesdatesubmittedpreassessorsactual.forEach(line => {
+                        if (line.includes(`${yeardatesubmittedpreassessorsactual} ${monthdatesubmittedpreassessorsactual}`)) {
+                            countdatesubmittedpreassessorsactual++;
+                        }
+                    });
+                    //ASSESSOR RELEASED Projected
+                    let countassrelprojected = 0;
+                    let yearassrelprojected = dashboard.Year;
+                    let monthassrelprojected = dashboard.Months;
+                    var stryearmonthassrelprojected = strassrelprojected;
+                    let linesassrelprojected = stryearmonthassrelprojected.split(',');
+                    linesassrelprojected.forEach(line => {
+                        if (line.includes(`${yearassrelprojected} ${monthassrelprojected}`)) {
+                            countassrelprojected++;
+                        }
+                    });
+                    //ASSESSOR RELEASED Actual
+                    let countdatereleasedassessorsactual = 0;
+                    let yeardatereleasedassessorsactual = dashboard.Year;
+                    let monthdatereleasedassessorsactual = dashboard.Months;
+                    var stryearmonthdatereleasedassessorsactual = strdatereleasedassessorsactual;
+                    let linesdatereleasedassessorsactual = stryearmonthdatereleasedassessorsactual.split(',');
+                    linesdatereleasedassessorsactual.forEach(line => {
+                        if (line.includes(`${yeardatereleasedassessorsactual} ${monthdatereleasedassessorsactual}`)) {
+                            countdatereleasedassessorsactual++;
+                        }
+                    });
+
+                    //var totalpermonth = dashboard.NoticeOfFullpaymentDate + dashboard.FullpaymentDatePrebir + dashboard.SubmissionDateProjected30 + dashboard.SubmissionDateBir + dashboard.BirReleasedProjected90 + dashboard.ReleasedDateBir + dashboard.PreRodSubProjected45 + dashboard.DateSubmittedRod + dashboard.RodSubProjected60 + dashboard.DateReleasedRod + dashboard.PreAssSubProjected15 + dashboard.DateSubmittedPreAssessors + dashboard.AssRelProjected60 + dashboard.DateReleasedAssessors;
+
+                    var totalpermonth = dashboard.NoticeOfFullpaymentDate + countfullpaymentdate + countsubmissiondatepro + countsubmissiondateact + countbirrealeasedprojected + countbirrealeasedactual + countprerodsubprojected + countdatesubmittedrodactual + countrodsubprojected + countdatereleasedrodactual + countpreasssubprojected + countdatesubmittedpreassessorsactual + countassrelprojected + countdatereleasedassessorsactual;
+
+                    rows += "<tr style='text-align:center'>";
+                    rows += "<td>" + dashboard.Year + "</td>";
+                    rows += "<td>" + dashboard.Months + "</td>";
+                    rows += "<td>" + dashboard.NoticeOfFullpaymentDate + "</td>";
+                    //rows += "<td>" + dashboard.FullpaymentDatePrebir + "</td>";
+                    //rows += "<td>" + dashboard.SubmissionDateProjected30 + "</td>";
+                    //rows += "<td>" + dashboard.SubmissionDateBir + "</td>";
+                    //rows += "<td>" + dashboard.BirReleasedProjected90 + "</td>";
+                    //rows += "<td>" + dashboard.ReleasedDateBir + "</td>";
+                    //rows += "<td>" + dashboard.PreRodSubProjected45 + "</td>";
+                    //rows += "<td>" + dashboard.DateSubmittedRod + "</td>";
+                    //rows += "<td>" + dashboard.RodSubProjected60 + "</td>";
+                    //rows += "<td>" + dashboard.DateReleasedRod + "</td>";
+                    //rows += "<td>" + dashboard.PreAssSubProjected15 + "</td>";
+                    //rows += "<td>" + dashboard.DateSubmittedPreAssessors + "</td>";
+                    //rows += "<td>" + dashboard.AssRelProjected60 + "</td>";
+                    //rows += "<td>" + dashboard.DateReleasedAssessors + "</td>";
+                    //rows += "<td>" + totalpermonth + "</td>";
+                    rows += "<td>" + countfullpaymentdate + "</td>";
+                    rows += "<td>" + countsubmissiondatepro + "</td>";
+                    rows += "<td>" + countsubmissiondateact + "</td>";
+                    rows += "<td>" + countbirrealeasedprojected + "</td>";
+                    rows += "<td>" + countbirrealeasedactual + "</td>";
+                    rows += "<td>" + countprerodsubprojected + "</td>";
+                    rows += "<td>" + countdatesubmittedrodactual + "</td>";
+                    rows += "<td>" + countrodsubprojected + "</td>";
+                    rows += "<td>" + countdatereleasedrodactual + "</td>";
+                    rows += "<td>" + countpreasssubprojected + "</td>";
+                    rows += "<td>" + countdatesubmittedpreassessorsactual + "</td>";
+                    rows += "<td>" + countassrelprojected + "</td>";
+                    rows += "<td>" + countdatereleasedassessorsactual + "</td>";
+                    rows += "<td>" + totalpermonth + "</td>";
+                    rows += "</tr>";
+                });
+                $('.MonthSummaryBody').html(rows);
+            }).done(function () {
+                $('#MonthSummary').DataTable({ "pageLength": 12 });
+            });
+
+            //function ExportToExcel(type, fn, dl) {
+            //    var elt = document.getElementById('TblSummary');
+            //    var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            //    return dl ?
+            //        XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+            //        XLSX.writeFile(wb, fn || ('CONVERSIONSYSTEM.' + (type || 'xlsx')));
+            //    alert("Okay");
+            //}
+
+        });
+    </script>
+}

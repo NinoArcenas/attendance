@@ -1,0 +1,487 @@
+﻿@model AttendanceManagementSystem.Models.User
+@{
+    ViewBag.Title = "Profile";
+
+    string username = "";
+    string fname = "";
+    string mname = "";
+    string lname = "";
+    string company = "";
+    string department = "";
+    string email = "";
+    int accesstype = 0;
+    int status = 0;
+    int id = 0;
+    foreach (var cis in ViewBag.users)
+    {
+
+        id = cis.id;
+        status = cis.status;
+
+        username = cis.username;
+        fname = cis.fname;
+        mname = cis.mname;
+        lname = cis.lname;
+        company = cis.company;
+        department = cis.department;
+        email = cis.email;
+        accesstype = cis.accesstype;
+    }
+
+}
+
+<div class="page-header">
+    <h1>
+        User Profile Page
+    </h1>
+</div><!-- /.page-header -->
+
+<body class="background-White" style="background-color:white">
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div>
+                <div id="user-profile-1" class="user-profile row">
+                    <div class="col-xs-12 col-sm-3 center">
+                        <div>
+                            @using (Html.BeginForm("profileImage", "Account", FormMethod.Post, new { method = "post", enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <span class="profile-picture">
+                                    @{
+                                        var userphoto = AttendanceManagementSystem.Controllers.AccountController.DisplayImageProfilePicture(User.Identity.Name);
+                                        byte[] UserImages = userphoto;
+                                        if (UserImages != null)
+                                        {
+                                            var UserPhotos = "data:image/png;base64," + Convert.ToBase64String(UserImages);
+                                            if (UserPhotos != null)
+                                            {
+                                                <img src="@UserPhotos" id="blah" class="img-responsive pic-bordered" alt="" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <img src="../assets/avatars/profile-pic.jpg" id="blah" class="img-responsive pic-bordered" alt="" />
+                                        }
+                                    }
+                                </span>
+                                <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                                    <div class="inline position-relative">
+                                        <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                            <i class="ace-icon fa fa-circle light-green"></i>
+                                            <small> <span class="white">@fname @mname. @lname</span> </small>
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr style="border-top: 3px double #8c8b8b">
+                                <div class="form-group">
+                                    <label>
+                                        <b>Browse to change profile picture</b>
+                                    </label>
+                                    <input type="file" name="imageforpreview" id="imageforpreview" />
+                                </div>
+                                <div class="form-actions" id="tosaveprofilepicture" style="display: none">
+                                    <button type="submit" id="saveprofilepicture" class="btn btn-primary btn-round btn-sm no-hover">Save profile picture</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <div class="col-xs-6">
+                            <div class="widget-box widget-color-blue">
+                                <div class="table-header">
+                                    Details
+                                </div>
+                                <table id="developer" class="table table-striped table-bordered table-hover">
+                                    @{
+                                        foreach (var cis in ViewBag.users)
+                                        {
+                                            <tr hidden>
+                                                <th class="center" style="background-color: bisque">Username</th>
+                                                <th class="center" style="background-color: bisque">@cis.id</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="center" style="background-color: bisque">Username</th>
+                                                <th class="right" style="background-color: bisque">@cis.username</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="center" style="background-color: bisque">Name</th>
+                                                <th class="right" style="background-color: bisque">
+                                                    <span class="editable" id="country">@cis.fname</span>
+                                                    <span class="editable" id="city">@cis.mname.</span>
+                                                    <span class="editable" id="city">@cis.lname</span>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="center" style="background-color: bisque">Company</th>
+                                                <th class="right" style="background-color: bisque">@cis.company</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="center" style="background-color: bisque">Department</th>
+                                                <th class="right" style="background-color: bisque">@cis.department</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="center" style="background-color: bisque">Email</th>
+                                                <th class="right" style="background-color: bisque">
+                                                    <a class="btn btn-link getEmployeeEmail" data-toggle="modal" data-target="#ModalUpdateEmail" title="Update Email" id="@cis.email*@cis.id">
+                                                        @cis.email
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="center" style="background-color: bisque">Access Type</th>
+                                                <th class="center" style="background-color: bisque">
+                                                    @if (accesstype == 1)
+                                                    {
+                                                        <div class="profile-info-value center">
+                                                            <span class="text-warning bigger-110 orange center">Administrator</span>
+                                                        </div>
+                                                    }
+                                                    else if (accesstype == 2)
+                                                    {
+                                                        <div class="profile-info-value">
+                                                            <span class="text-warning bigger-110 orange">Admin</span>
+                                                        </div>
+                                                    }
+                                                    else if (accesstype == 3)
+                                                    {
+                                                        <div class="profile-info-value">
+                                                            <span class="text-warning bigger-110 orange">Approver</span>
+                                                        </div>
+                                                    }
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                @if (accesstype == 1)
+                                                {
+                                                    <th class="center" style="background-color: bisque">Changed Password</th>
+                                                    <th class="left" style="background-color: bisque">
+                                                        <a class="btn btn-link getUserPass" data-toggle="modal" data-target="#ModalChangedPass" title="Changed Password" id="@User.Identity.Name">
+                                                            <i class="ace-icon fa fa-exchange bigger-110 green"></i>
+                                                            Changed Password
+                                                        </a>
+                                                    </th>
+                                                }
+                                                else if (accesstype == 2)
+                                                {
+                                                    <th class="center" style="background-color: bisque">Changed Password</th>
+                                                    <th class="left" style="background-color: bisque">
+                                                        <a class="btn btn-link getUserPass" data-toggle="modal" data-target="#ModalChangedPass" title="Changed Password" id="@User.Identity.Name">
+                                                            <i class="ace-icon fa fa-exchange bigger-110 green"></i>
+                                                            Changed Password
+                                                        </a>
+                                                    </th>
+                                                }
+                                                else if (accesstype == 3)
+                                                {
+                                                    <th class="center" style="background-color: bisque">Changed Password</th>
+                                                    <th class="left" style="background-color: bisque">
+                                                        <a class="btn btn-link getUserPass" data-toggle="modal" data-target="#ModalChangedPass" title="Changed Password" id="@User.Identity.Name">
+                                                            <i class="ace-icon fa fa-exchange bigger-110 green"></i>
+                                                            Changed Password
+                                                        </a>
+                                                    </th>
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Modal Edit Access type-->
+                    <div class="modal fade" id="ModalChangedAccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Access Type</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label no-padding-right">Access Type:</label>
+                                            <div class="col-sm-12">
+                                                <select name="UpdatedAccessType" id="UpdatedAccessType" class="col-xs-12">
+                                                    <option> </option>
+                                                    <option value="1">Administrator</option>
+                                                    <option value="2">Admin</option>
+                                                    <option value="3">User</option>
+                                                </select>
+                                            </div>
+                                            <br />
+                                            <br />
+                                        </div>
+                                        <br />
+                                        <div class="form-group" style="display:none">
+                                            <label for="recipient-name" class="col-form-label">ID:</label>
+                                            <input type="text" class="form-control" id="EditIDAccessType">
+                                        </div>
+                                    </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-info btn-sm tooltip-info" data-rel="tooltip" data-placement="bottom" data-original-title="Bottm Info" id="updateAccessType">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Modal Edit Email type-->
+                    <div class="modal fade" id="ModalUpdateEmail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Email</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label no-padding-right">Email:</label>
+                                            <div class="col-sm-12">
+                                                <input type="email" id="EditEmail" name="EditEmail" value="" class="col-xs-12 col-sm-12">
+                                            </div>
+                                            <br />
+                                            <br />
+                                        </div>
+                                        <br />
+                                        <div class="form-group" style="display:none">
+                                            <label for="recipient-name" class="col-form-label">ID:</label>
+                                            <input type="text" class="form-control" id="EditIDEmail">
+                                        </div>
+                                    </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-info btn-sm tooltip-info" data-rel="tooltip" data-placement="bottom" data-original-title="Bottm Info" id="updateEmail">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</body>
+
+<!--Modal Edit Access type-->
+<div class="modal fade" id="ModalChangedPass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="exampleModalLabel">Change Password Form</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group center">
+                        <label class="col-sm-3" for="form-field-1"> Username </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="UserAccount" name="UserAccount" class="col-xs-10 col-sm-9" disabled>
+                        </div>
+                        <br>
+                    </div>
+                    <br />
+                    <div class="form-group center">
+                        <label class="col-sm-3" for="form-field-1"> <label id="accsesstypehide" style="color: red">*</label> Current Password </label>
+                        <div class="col-sm-9">
+                            <input type="password" id="OldPassword" name="OldPassword" class="col-xs-10 col-sm-9" autocomplete="off">
+                        </div>
+                        <br>
+                    </div>
+                    <br />
+                    <div class="form-group center">
+                        <label class="col-sm-3" for="form-field-1"><label id="accsesstypehide" style="color: red">*</label> New Password </label>
+                        <div class="col-sm-9">
+                            <input type="password" id="NewPassword" name="NewPassword" class="col-xs-10 col-sm-9" autocomplete="off">
+                        </div>
+                        <br>
+                    </div>
+                    <br />
+                    <div class="form-group" style="display:none">
+                        <label for="recipient-name" class="col-form-label">ID:</label>
+                        <input type="text" class="form-control" id="EditIDchangedpass">
+                    </div>
+                </form>
+                <div class="form-actions center">
+                    <button class="btn btn-info" id="changedpassword">
+                        Change password
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                    //diri nako epa display ang style none div
+                    document.getElementById("tosaveprofilepicture").style.display = "block";
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imageforpreview").change(function () {
+            readURL(this);
+        });
+
+        $(document).ready(function () {
+            $(".getUserPass").click(function () {
+                var User = this.id;
+                $("#UserAccount").val(User);
+            });
+
+            var last_gritter
+            $('#avatar').editable({
+                type: 'image',
+                name: 'avatar',
+                value: null,
+                image: {
+                    btn_choose: 'Change Avatar',
+                    droppable: true,
+                    maxSize: 110000,//~100Kb
+                    name: 'avatar',//put the field name here as well, will be used inside the custom plugin
+                    on_error: function (error_type) {//on_error function will be called when the selected file has a problem
+                        if (last_gritter) $.gritter.remove(last_gritter);
+                        if (error_type == 1) {//file format error
+                            last_gritter = $.gritter.add({
+                                title: 'File is not an image!',
+                                text: 'Please choose a jpg|gif|png image!',
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        } else if (error_type == 2) {//file size rror
+                            last_gritter = $.gritter.add({
+                                title: 'File too big!',
+                                text: 'Image size should not exceed 100Kb!',
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                        else {//other error
+                        }
+                    },
+                    on_success: function () {
+                        $.gritter.removeAll();
+                    }
+                },
+                url: function (params) {
+                    var deferred = new $.Deferred
+                    var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
+                    if (!value || value.length == 0) {
+                        deferred.resolve();
+                        return deferred.promise();
+                    }
+
+                    //dummy upload
+                    setTimeout(function () {
+                        if ("FileReader" in window) {
+                            //for browsers that have a thumbnail of selected image
+                            var thumb = $('#avatar').next().find('img').data('thumb');
+                            if (thumb) $('#avatar').get(0).src = thumb;
+                        }
+                        deferred.resolve({ 'status': 'OK' });
+                        if (last_gritter) $.gritter.remove(last_gritter);
+                        last_gritter = $.gritter.add({
+                            title: 'Avatar Updated!',
+                            text: 'Uploading to server can be easily implemented. A working example is included with the template.',
+                            class_name: 'gritter-info gritter-center'
+                        });
+
+                    }, parseInt(Math.random() * 800 + 800))
+
+                    return deferred.promise();
+
+                    // ***END OF UPDATE AVATAR HERE*** //
+                },
+
+                success: function (response, newValue) {
+                }
+            })
+
+            //Get User Password
+            $(".getAccessType").click(function () {
+                var id = this.id;
+                var splits = id.split('*');
+                var UpdatedAccessType = splits[0];
+                var EditIDAccessType = splits[1];
+                $("#UpdatedAccessType").val(UpdatedAccessType);
+                $("#EditIDAccessType").val(EditIDAccessType);
+            });
+            //Update User Password
+            $("#updateAccessType").click(function () {
+                var Acc = $("#UpdatedAccessType").val();
+                var ID = $("#EditIDAccessType").val();
+                var url = "/Account/UpdateAccessType"
+                $.post(url, { id: ID, acc: Acc, }, function (data) {
+                    if (data == "updateaccesstype") {
+                        alert("Successfully Update.");
+                        location.reload();
+                    }
+                    else {
+                        alert(data);
+                    }
+                });
+            });
+
+            // User changed Password
+            $("#changedpassword").click(function () {
+                var Username = $("#UserAccount").val();
+                var OldPass = $("#OldPassword").val();
+                var NewPass = $("#NewPassword").val();
+                var url = "/Account/changepass"
+                $.post(url, { idno: Username, oldpassword: OldPass, newpassword: NewPass }, function (data) {
+                    alert("Successfully changed Password.");
+                    location.reload();
+                });
+            });
+
+            //Get Email
+            $(".getEmployeeEmail").click(function () {
+                var EmailID = this.id;
+                var splits = EmailID.split('*');
+                var EditEmail = splits[0];
+                var EditIDEmail = splits[1];
+                $("#EditEmail").val(EditEmail);
+                $("#EditIDEmail").val(EditIDEmail);
+            });
+            //Update Email
+            $("#updateEmail").click(function () {
+                var Email = $("#EditEmail").val();
+                var ID = $("#EditIDEmail").val();
+                var url = "/Account/UpdateEmails"
+                $.post(url, { id: ID, eml: Email }, function (data) {
+                    if (data == "updateemail") {
+                        Swal.fire(
+                            'Successfully Update!',
+                            'Please clicked the button!',
+                            'success'
+                        ).then(function () {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        alert(data);
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}

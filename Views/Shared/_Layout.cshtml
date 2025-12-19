@@ -1,0 +1,509 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Attendance Management System</title>
+    <meta name="description" content="404 Error Page" />
+
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <meta name="description" content="and Validation" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+    <link rel="stylesheet" href="~/assets/css/jquery-ui.custom.min.css" />
+    <link rel="stylesheet" href="~/assets/css/jquery.gritter.min.css" />
+    <link rel="stylesheet" href="~/assets/css/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/css/datepicker.min.css" />
+    <link rel="stylesheet" href="~/assets/css/bootstrap-editable.min.css" />
+
+    <link rel="stylesheet" href="~/assets/css/chosen.min.css" />
+    <link rel="stylesheet" href="~/assets/css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" href="~/assets/css/bootstrap-datetimepicker.min.css" />
+    <link href="~/assets/css/daterangepicker.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/assets/css/bootstrap-multiselect.min.css" />
+    <link rel="stylesheet" href="~/assets/fonts/fonts.googleapis.com.css" />
+    <link rel="stylesheet" href="~/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+    <link rel="stylesheet" href="~/assets/fonts/jquery-ui-datetimepiker.css" />
+    <link rel="stylesheet" href="~/assets/css/jquery.dataTables.min.css" />
+    <link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" />
+
+    <style>
+        /* Style the header */
+        header {
+            position: fixed; /* Fixes the header to the top of the viewport */
+            top: 0;
+            left: 0;
+            width: 100%; /* Full width */
+            background-color: #333; /* Background color */
+            color: white; /* Text color */
+            /*padding: 1px 0;*/ /* Padding for the header */
+            text-align: center; /* Center the text */
+            z-index: 1000; /* Ensure it's on top of other elements */
+        }
+
+        .sidebar {
+            position: fixed; /* Fixed position */
+            top: 45px;
+            left: 0;
+        }
+
+        /* Style the content */
+        .content {
+            padding: 1px;
+        }
+    </style>
+
+</head>
+
+<body class="no-skin">
+
+    @{
+        var GetAccessType_usingUsername = AttendanceManagementSystem.Controllers.ZionController.GetAccessType_usingUsername(User.Identity.Name);
+        var GetFname = AttendanceManagementSystem.Controllers.ZionController.GetFname(User.Identity.Name);
+        var Accesstype = AttendanceManagementSystem.Controllers.ZionController.Accesstype(User.Identity.Name);
+    }
+
+    <header>
+        <div id="navbar" class="navbar navbar-default">
+            <script type="text/javascript">
+                try { ace.settings.check('navbar', 'fixed') } catch (e) { }
+            </script>
+
+            <div class="navbar-container" id="navbar-container">
+                <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                    <span class="sr-only">Toggle sidebar</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <div class="navbar-header pull-left">
+                    <a href="/Home/Index" class="navbar-brand">
+                        <small>
+                            <i class=""></i>
+                            <small>ZION</small><small style="color: lightgreen"> | Attendance Management System</small>
+
+                        </small>
+                    </a>
+                </div>
+
+                <div class="navbar-buttons navbar-header pull-right" role="navigation">
+                    <ul class="nav ace-nav">
+                        <li class="light-blue">
+                            <a data-toggle="dropdown" href="#" class="dropdown-default">
+                                @{
+                                        var userphoto = AttendanceManagementSystem.Controllers.AccountController.DisplayImageProfilePicture(User.Identity.Name);
+                                    byte[] UserImages = userphoto;
+                                    if (UserImages != null)
+                                    {
+                                        var UserPhotos = "data:image/png;base64," + Convert.ToBase64String(UserImages);
+                                        if (UserPhotos != null)
+                                        {
+                                            <img src="@UserPhotos" class="nav-user-photo" alt="" width="42" height="42" />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <img class="nav-user-photo" src="~/assets/avatars/user.jpg" alt="Jason's Photo" />
+                                    }
+                                }
+                                <span class="user-info">
+                                    <small>Welcome,</small>
+                                    <labe href="/Account/Profile" style="color:greenyellow">@GetFname</labe>
+                                </span>
+                                <i class="ace-icon fa fa-caret-down"></i>
+                            </a>
+
+                            <ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="/Account/Profile?username=@User.Identity.Name">
+                                        <i class="ace-icon fa fa-user"></i>
+                                        Profile:@if (Accesstype == "1")
+                                        {
+                                            <div class="profile-info-value">
+                                                <span class="text-warning bigger-120 orange" id="accesstype">Administrator</span>
+                                            </div>
+                                        }
+                                        else if (Accesstype == "2")
+                                        {
+                                            <div class="profile-info-value">
+                                                <span class="text-warning bigger-120 orange" id="accesstype">Admin</span>
+                                            </div>
+                                        }
+                                        else if (Accesstype == "3")
+                                        {
+                                            <div class="profile-info-value">
+                                                <span class="text-warning bigger-120 orange" id="accesstype">Approver</span>
+                                            </div>
+                                        }
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">
+
+                                        @using (Html.BeginForm("LogOff", "Admin", FormMethod.Post, new { id = "logoutForm" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <i class="ace-icon fa fa-power-off"></i> <label> <small> Logout </small> </label>
+                                        }
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.navbar-container -->
+        </div>
+    </header>
+    <div class="sidebar">
+        <div id="sidebar" class="sidebar responsive">
+            <script type="text/javascript"></script>
+            <ul class="nav nav-list navbar-menu">
+
+                <li class="">
+                    <a href="/Home/Index">
+                        <i class="menu-icon fa fa-tachometer"></i>
+                        <span class="menu-text"> Dashboard </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                @if (GetAccessType_usingUsername == "1")//Zion
+                {
+                    <li class="">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">
+                                Administration
+                            </span>
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li class="">
+                                <a href="/Account/CreateUserRegistration">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Create User Registration
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="submenu">
+                            <li class="">
+                                <a href="/Account/Register">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Register User
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon ace-icon glyphicon glyphicon-user"></i>
+                            <span class="menu-text"> Navigation Lists </span>
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+
+                            <li class="">
+                                <a href="/Zion/ZionMaster" id="documentprocess">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Master
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+                            @*<li class="">
+                                <a href="/Zion/Brothers" id="documentprocess">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    List of Brothers
+                                </a>
+                                <b class="arrow"></b>
+                            </li>*@
+
+                            <li class="">
+                                <a href="/Zion/Attendance" id="documentprocess">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Attendance
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+                        </ul>
+                    </li>
+                }
+
+            </ul><!-- /.nav-list -->
+
+            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+            </div>
+            <script type="text/javascript">
+                try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+            </script>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+                </script>
+
+                
+            </div>
+
+            <div id="body">
+                @RenderSection("featured", required: false)
+                <div class="page-content">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div><!-- /.main-content -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="loading" align="center">
+                        Loading. Please wait.<br />
+                        <br />
+                        <img src="~/assets/img/loading.gif" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+
+    <script src="~/assets/js/jquery.2.1.1.min.js"></script>
+
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='~/assets/js/jquery.min.js'>" + "<" + "/script>");
+    </script>
+
+    <script type="text/javascript">
+        if ('ontouchstart' in document.documentElement) document.write("<script src='~/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+
+    <!-- ace scripts -->
+    <script src="~/assets/js/bootstrap.min.js"></script>
+
+    <script src="~/assets/js/fuelux.wizard.min.js"></script>
+    <script src="~/assets/js/jquery.validate.min.js"></script>
+    <script src="~/assets/js/additional-methods.min.js"></script>
+
+    <script src="~/assets/js/jquery-ui.custom.min.js"></script>
+    <script src="~/assets/js/jquery.ui.touch-punch.min.js"></script>
+
+    <script src="~/assets/js/jquery.gritter.min.js"></script>
+    <script src="~/assets/js/spin.min.js"></script>
+    <script src="~/assets/js/bootbox.min.js"></script>
+    <script src="~/assets/js/jquery.easypiechart.min.js"></script>
+    <script src="~/assets/js/jquery.sparkline.min.js"></script>
+    <script src="~/assets/js/jquery.flot.min.js"></script>
+
+    <script src="~/assets/js/ace-extra.min.js"></script>
+
+
+    <script src="~/assets/js/jquery.flot.pie.min.js"></script>
+    <script src="~/assets/js/jquery.flot.resize.min.js"></script>
+
+
+    <script src="~/assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/js/jquery.hotkeys.min.js"></script>
+    <script src="~/assets/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="~/assets/js/select2.min.js"></script>
+    <script src="~/assets/js/fuelux.spinner.min.js"></script>
+    <script src="~/assets/js/bootstrap-editable.min.js"></script>
+    <script src="~/assets/js/ace-editable.min.js"></script>
+    <script src="~/assets/js/jquery.maskedinput.min.js"></script>
+
+    <script src="~/assets/js/bootstrap-multiselect.min.js"></script>
+    <script src="~/assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/jquery.dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/js/dataTables.tableTools.min.js"></script>
+    <script src="~/assets/js/dataTables.colVis.min.js"></script>
+    <script src="~/assets/js/chosen.jquery.min.js"></script>
+    <script src="~/assets/js/bootstrap-colorpicker.min.js"></script>
+
+    <script src="~/assets/js/export_to_excel.js"></script>
+
+    <script src="~/assets/js/ace-elements.min.js"></script>
+    <script src="~/assets/js/ace.min.js"></script>
+
+    <script src="~/assets/js/jquery-datetimepiker.js"></script>
+
+    <script src="~/assets/js/fuelux.tree.min.js"></script>
+
+    <script src="~/assets/js/moment.min.js"></script>
+    <script src="~/assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/assets/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/js/daterangepicker.min.js"></script>
+    <script src="~/assets/js/sweetalert2.all.min.js"></script>
+    <script src="~/assets/js/jquery.colorbox.min.js"></script>
+
+    <script src="~/assets/js/chart.js"></script>
+
+    <script type="text/javascript">
+        var modal, loading;
+        function ShowProgress() {
+            $('#myModal').modal('show');
+            modal = document.createElement("DIV");
+            modal.className = "modal";
+            document.body.appendChild(modal);
+            loading = document.getElementsByClassName("loading")[0];
+            loading.style.display = "block";
+            var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+            var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+            loading.style.top = top + "px";
+            loading.style.left = left + "px";
+
+        };
+        ShowProgress();
+
+        window.onload = function () {
+            setTimeout(function () {
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                $('#myModal').modal('hide');
+            }, 400); //Delay just used for example and must be set to 0.
+        };
+
+        $(document).ready(function () {
+
+            $("#userregistration").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            //$("#masters").click(function () {
+            //    $('#myModal').modal('show');
+            //    modal = document.createElement("DIV");
+            //    modal.className = "modal";
+            //    document.body.appendChild(modal);
+            //    loading = document.getElementsByClassName("loading")[0];
+            //    loading.style.display = "block";
+            //    var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+            //    var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+            //    loading.style.top = top + "px";
+            //    loading.style.left = left + "px";
+            //});
+
+            $("#documentprocess").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            $("#approvedocuments").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            $("#documentstatus").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            $("#turnovers").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            $("#turnoveraccounthistory").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            $("#archives").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+            $("#reports").click(function () {
+                $('#myModal').modal('show');
+                modal = document.createElement("DIV");
+                modal.className = "modal";
+                document.body.appendChild(modal);
+                loading = document.getElementsByClassName("loading")[0];
+                loading.style.display = "block";
+                var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+                var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+                loading.style.top = top + "px";
+                loading.style.left = left + "px";
+            });
+
+        });
+    </script>
+
+</body>
+</html>

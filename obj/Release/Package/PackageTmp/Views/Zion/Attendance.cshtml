@@ -1,0 +1,391 @@
+﻿@model AttendanceManagementSystem.Models.ClientInfoStatus
+@{
+    ViewBag.Title = "Attendance";
+
+    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+    var stringChars = new char[20];
+    var random = new Random();
+
+    for (int i = 0; i < stringChars.Length; i++)
+    {
+        stringChars[i] = chars[random.Next(chars.Length)];
+    }
+    var finalString = new String(stringChars);
+}
+
+<body class="background-White" style="background-color:white">
+    <div class="widget-body" style="background-color:white">
+        <div class="col-xs-12 col-sm-12">
+            <div class="widget-box widget-color-blue3">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        ATTENDANCE LIST
+                        <div class="widget-toolbar">
+                            <div class="pull-center">
+                                <a class="btn btn-xs btn-primary no-hover" data-toggle="modal" data-target="#CreateAttendanceModal">
+                                    <span class="bigger-110">Create Attendance</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="attendanceTable" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="center" style="color: black; background-color: cornflowerblue" hidden>Ref No.</th>
+                            <th class="center" style="color: black; background-color: cornflowerblue">Group Name</th>
+                            <th class="center" style="color: black; background-color: cornflowerblue">Group Leader</th>
+                            <th class="center" style="color: black; background-color: cornflowerblue">Date</th>
+                            @*<th class="center" style="color: black; background-color: cornflowerblue">Worship Service</th>*@
+                            <th class="center" style="color: black; background-color: cornflowerblue">Total Members</th>
+                            <th class="center" style="color: black; background-color: cornflowerblue">Total Attend</th>
+                            <th class="center" style="color: black; background-color: cornflowerblue">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody class="list">
+                        @{
+
+                            // Tuples: Item1 = gencode, Item2 = date (DateTime?), Item3 = count
+                            var attendanceCounts = AttendanceManagementSystem.Controllers.ZionController.GetAttendanceCounts();
+                            var groupNames = AttendanceManagementSystem.Controllers.ZionController.GetListOfGroupName();
+
+                            foreach (var groupname in groupNames)
+                            {
+                                var leaderName = AttendanceManagementSystem.Controllers.ZionController.GetFullnameUsingGencode(groupname.leader_gencode);
+
+                                var groupAttendance = attendanceCounts.Where(t => t.Item1 == groupname.gencode);
+
+                                foreach (var row in groupAttendance)
+                                {
+                                    DateTime? d = row.Item2;
+                                    var dateText = d.HasValue ? d.Value.ToString("MMMM dd, yyyy") : "";
+
+                                                <tr class="position-static">
+                                                    <td style="text-align: center" hidden>@groupname.id</td>
+                                                    <td style="text-align: center">@groupname.group_name</td>
+                                                    <td style="text-align: center">@leaderName</td>
+                                                    <td style="text-align: center">@dateText</td>
+                                                    @*<td style="text-align: center">@attendanceCounts.worship_day</td>*@
+                                                    <td style="text-align: center">@groupname.total_members</td>
+                                                    <td style="text-align: center">@row.Item3</td>
+                                                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4 btn-reveal-trigger sticky-action-column" style="z-index: 10;">
+                                                        <div class="font-sans-serif btn-reveal-trigger position-static">
+                                                            <a class="btn btn-minier btn-yellow" href="../Zion/ViewAttendance?gencode=@groupname.gencode" target="_blank">View</a>
+                                                            <button class="btn btn-minier btn-primary">Edit</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!--Modal Add MAJOR ACTIVITY-->
+            <div class="modal fade" id="CreateAttendanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document" style="width:70%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5 class="modal-title" id="exampleModalLabel">Create Attendance</h5>
+                            <input type="text" value="@finalString" id="controlnumbergenerated" style="display:none">
+                        </div>
+                        <div class="modal-body">
+                            <form id="FormMojorActivity" method="post">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Group Name <label style="color: red">*</label>:</label>
+                                                @Html.DropDownListFor(
+                                                  model => model.company_name,
+                                                  new SelectList(ViewBag.groupname, "Value", "Text"),
+                                                  "---Select Members---",
+                                                  new { @class = "form-control chosen-select", id = "AddGroupName", style = "color: black; width:100%" }
+                                                )
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Total Members <label style="color: red">*</label>:</label>
+                                                <input type="text" class="form-control" id="AddTotalMembers" readonly="readonly" />
+                                            </div>
+                                            <div class="form-group" style="display:none">
+                                                <label for="recipient-name" class="col-form-label">Group Name Gencode <label style="color: red">*</label>:</label>
+                                                <input type="text" class="form-control" id="AddLeaderGencode" readonly="readonly" />
+                                            </div>
+                                            <div class="form-group" style="display:none">
+                                                <label for="recipient-name" class="col-form-label">Members Gencode <label style="color: red">*</label>:</label>
+                                                <input type="text" class="form-control" id="AddTotalNumber" readonly="readonly" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Date <label style="color: red">*</label>:</label>
+                                                <input type="date" class="form-control" id="AddDateAttendance" autocomplete="off" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Select Week <label style="color: red">*</label>:</label>
+                                                <select class="form-control" id="AddSelectedWeek">
+                                                    <option value=""> </option>
+                                                    <option value="1st Week">1st Week </option>
+                                                    <option value="2nd Week">2nd Week </option>
+                                                    <option value="3rd Week">3rd Week </option>
+                                                    <option value="4th Week">4th Week </option>
+                                                    <option value="5th Week">5th Week </option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Select Worship <label style="color: red">*</label>:</label>
+                                                <select class="form-control" id="AddSelectedWorship">
+                                                    <option value=""> </option>
+                                                    <option value="T">T </option>
+                                                    <option value="S1">S1 </option>
+                                                    <option value="S2">S2 </option>
+                                                    <option value="S3">S3 </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-8">
+                                            <div class="table-responsive scrollable-table">
+                                                LIST OF MEMBER
+                                                <table class="table fs--1 mb-0" id="CheckMembersTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-left">Check Attend</th>
+                                                            <th class="text-left">Name</th>
+                                                            <th class="text-left">Life Number</th>
+                                                            <th class="text-left">Input</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary no-hover" id="SaveAttendance">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#AddGroupName').on('change', function () {
+                var selectedValue = $(this).val(); // e.g. "123*LN45678"
+
+                if (selectedValue) {
+                    var parts = selectedValue.split('*');
+                    $('#AddLeaderGencode').val(parts[0]);
+                    $('#AddTotalMembers').val(parts[1]);
+                } else {
+                    $('#AddLeaderGencode').val('');
+                    $('#AddTotalMembers').val('');
+                }
+            });
+
+            //// DropDown 변경 이벤트
+            //$("#AddGroupName").change(function () {
+            //    var gencode = $("#AddLeaderGencode").val();  // 선택한 group_name_gencode 값
+
+            //    if (gencode) {
+            //        $('#CheckMembersTable').DataTable({
+            //            destroy: true,
+            //            ajax: {
+            //                url: '/Zion/GetGroupMembers', // Controller Action
+            //                data: { groupNameGencode: gencode },
+            //                type: 'GET',
+            //                dataSrc: 'data'
+            //            },
+            //            columns: [
+            //                {
+            //                    data: null,
+            //                    className: "text-center",
+            //                    render: function (data, type, row) {
+            //                        return `<input type="checkbox" class="createmembers" id="${row.Generatedcode}" value="${row.Generatedcode}">`;
+            //                    }
+            //                },
+            //                { data: "FullName", className: "text-center" },
+            //                { data: "LifeNumber", className: "text-center" }
+            //            ]
+            //        });
+            //    }
+            //});
+
+            $("#AddGroupName").change(function () {
+                var gencode = $("#AddLeaderGencode").val();  // selected group_name_gencode
+
+                if (gencode) {
+                    $('#CheckMembersTable').DataTable({
+                        destroy: true,
+                        ajax: {
+                            url: '/Zion/GetGroupMembers', // Controller Action
+                            data: { groupNameGencode: gencode },
+                            type: 'GET',
+                            dataSrc: 'data'
+                        },
+                        columns: [
+                            {
+                                data: null,
+                                className: "text-left",
+                                render: function (data, type, row) {
+                                    return `<input type="checkbox" class="createmembers" id="${row.Generatedcode}" value="${row.Generatedcode}">`;
+                                }
+                            },
+                            { data: "FullName", className: "text-left" },
+                            { data: "LifeNumber", className: "text-left" },
+                            {
+                                data: null,
+                                className: "text-left",
+                                render: function (data, type, row) {
+                                    return `
+                            <input type="number"
+                                   class="form-control member-input"
+                                   id="input_${row.Generatedcode}"
+                                   name="input_${row.Generatedcode}"
+                                   placeholder="input attendance"
+                                   style="width:100%">
+                        `;
+                                }
+                            }
+                        ]
+                    });
+                }
+            });
+
+
+            let selectedProducts = new Set();
+
+            // Init DataTable
+            const table = $('#CheckMembersTable').DataTable({
+                language: { paginate: { previous: '', next: '' } },
+                paging: true,
+                pageLength: 5,
+                info: false,
+                lengthChange: true,
+                // Preserve checked state
+                rowCallback: function (row, data) {
+                    const $cb = $(row).find('.createmembers');
+                    const val = $cb.val();
+                    $cb.prop('checked', selectedProducts.has(val));
+                }
+            });
+
+            // Track checkbox changes (delegated)
+            $('#CheckMembersTable').on('change', '.createmembers', function () {
+                const memberCode = $(this).val();
+                if (this.checked) {
+                    selectedProducts.add(memberCode);
+                } else {
+                    selectedProducts.delete(memberCode);
+                }
+                $("#AddTotalNumber").val(Array.from(selectedProducts).join(', ')); // show values
+            });
+
+            // Save all checked in ONE request
+            $("#SaveAttendance").click(async function () {
+                const members = Array.from(selectedProducts);
+
+                if (members.length === 0) {
+                    Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please select at least 1 member.' });
+                    return;
+                }
+
+                for (const checkboxId of members) {
+                    const qtyInput = $("#input_" + checkboxId);
+                    const qty = qtyInput.val()?.trim();
+
+                    if (!qty || isNaN(qty) || Number(qty) <= 0) {
+                        qtyInput?.addClass("is-invalid");
+                        qtyInput?.focus();
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Missing or Invalid Attend',
+                            text: `Please input a valid Attendance`
+                        });
+                        strokay = "error";
+                        return;
+                    } else {
+                        qtyInput?.removeClass("is-invalid");
+                        strokay = "saccess";
+                    }
+                }
+
+                const generated_code = $("#controlnumbergenerated").val()?.trim();
+                const grouped_gencode = $("#AddLeaderGencode").val()?.trim();
+                // Ensure date is in ISO format (yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss)
+                const dateRaw = $("#AddDateAttendance").val()?.trim();
+                const weeks = $("#AddSelectedWeek").val()?.trim();
+                const worship_day = $("#AddSelectedWorship").val()?.trim();
+
+                // ✅ FIX: validate the same variables you just read
+                if (!generated_code || !grouped_gencode || !dateRaw || !weeks || !worship_day) {
+                    Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please fill in all required fields.' });
+                    return;
+                }
+
+                try {
+                    $("#SaveAttendance").prop('disabled', true);
+
+                    const payload = {
+                        generated_code: generated_code,
+                        grouped_gencode: grouped_gencode,
+                        // If your server expects DateTime?, keep raw ISO string; MVC can parse yyyy-MM-dd
+                        date: dateRaw,
+                        weeks: weeks,
+                        worship_day: worship_day,
+                        memberCodes: members
+                    };
+
+                    const result = await $.ajax({
+                        url: '/Zion/SaveAttendanceBulk',
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(payload),
+                        dataType: 'json'
+                    });
+
+                    if (!result?.success) {
+                        throw new Error(result?.message || 'Save failed.');
+                    }
+
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Attendance successfully created!',
+                        text: 'Click OK to reload the page.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'OK'
+                    });
+
+                    location.reload();
+                } catch (err) {
+                    console.error('Save error:', err);
+                    Swal.fire({ icon: 'error', title: 'Error', text: err.message || 'Something went wrong while saving. Please try again.' });
+                } finally {
+                    $("#SaveAttendance").prop('disabled', false);
+                }
+            });
+
+
+            $("#attendanceTable").DataTable();
+
+        });
+
+    </script>
+}

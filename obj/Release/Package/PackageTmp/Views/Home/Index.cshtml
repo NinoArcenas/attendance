@@ -1,0 +1,362 @@
+﻿@model List<AttendanceManagementSystem.Models.AgingTable>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h4>Home Page</h4>
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            //format date to table summary
+            function formatDate(dateString) {
+                if (!dateString) return ''; // Return empty string if dateString is undefined or null
+
+                var dateString1 = dateString.substr(6); // Assuming dateString format is "/Date(1720627200000)/"
+                var currentTime = new Date(parseInt(dateString1));
+                var monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                var month = monthNames[currentTime.getMonth()];
+                var day = currentTime.getDate();
+                var year = currentTime.getFullYear();
+
+                return month + ' ' + day + ', ' + year;
+            }
+
+            //after click add or edit in turnover checklist.. dapat naka view ra japon sa kana nga tab
+            if (location.hash) {
+                $("a[href='" + location.hash + "']").tab("show");
+            }
+            $(document.body).on("click", "a[data-toggle='tab']", function (event) {
+                location.hash = this.getAttribute("href");
+            });
+
+        }); //end from document.ready
+
+        TableManageButtons.init();
+
+        //kani sumpay sa open tab after load sa page.
+        $(window).on("popstate", function () {
+            var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+            $("a[href='" + anchor + "']").tab("show");
+        });
+    </script>
+
+    <script>
+    // JavaScript to render the donut chart
+        document.addEventListener("DOMContentLoaded", function () {
+
+        // Prepare data for the chart PRE-BIR
+        var statusesprebir = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.PRE_BIR_STATUS)));
+        var statusCountsprebir = {
+            ongoing: statusesprebir.filter(status => status === "ongoing").length,
+            doneOnTime: statusesprebir.filter(status => status === "done on time").length,
+            doneDelay: statusesprebir.filter(status => status === "done delay").length,
+            delay: statusesprebir.filter(status => status === "delay").length
+        };
+        var dataValuesprebir = [
+            statusCountsprebir.ongoing,
+            statusCountsprebir.doneOnTime,
+            statusCountsprebir.doneDelay,
+            statusCountsprebir.delay
+        ];
+        var totalprebir = dataValuesprebir.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+        var ctx = document.getElementById('myPieChartprebir').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuesprebir,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuesprebir[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalprebir ? ((value / totalprebir) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Prepare data for the chart BIR SUBMISSION
+        var statusesbirsub = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.BIR_SUBMISSION_STATUS)));
+        var statusCountsbirsub = {
+            ongoing: statusesbirsub.filter(status => status === "ongoing").length,
+            doneDelay: statusesbirsub.filter(status => status === "done delay").length,
+            doneOnTime: statusesbirsub.filter(status => status === "done on time").length,
+            delay: statusesbirsub.filter(status => status === "delay").length
+        };
+        var dataValuesbirsub = [
+            statusCountsbirsub.ongoing,
+            statusCountsbirsub.doneOnTime,
+            statusCountsbirsub.doneDelay,
+            statusCountsbirsub.delay
+        ];
+        var totalbirsub = dataValuesbirsub.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+        var ctx = document.getElementById('myPieChartbirsubmission').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuesbirsub,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuesbirsub[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalbirsub ? ((value / totalbirsub) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Prepare data for the chart BIR RELEASED
+        var statusesbirrel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.BIR_RELEASE_STATUS)));
+        var statusCountsbirrel = {
+            ongoing: statusesbirrel.filter(status => status === "ongoing").length,
+            doneDelay: statusesbirrel.filter(status => status === "done delay").length,
+            doneOnTime: statusesbirrel.filter(status => status === "done on time").length,
+            delay: statusesbirrel.filter(status => status === "delay").length
+        };
+        var dataValuesbirrel = [
+            statusCountsbirrel.ongoing,
+            statusCountsbirrel.doneOnTime,
+            statusCountsbirrel.doneDelay,
+            statusCountsbirrel.delay
+        ];
+        var totalbirrel = dataValuesbirrel.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+        var ctx = document.getElementById('myPieChartvbirreleased').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuesbirrel,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuesbirrel[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalbirrel ? ((value / totalbirrel) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Prepare data for the chart PRE-ROD SUBMISSION
+        var statusesprerodsub = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.PRE_ROD_SUBMISSION_STATUS)));
+        var statusCountsprerodsub = {
+            ongoing: statusesprerodsub.filter(status => status === "ongoing").length,
+            doneDelay: statusesprerodsub.filter(status => status === "done delay").length,
+            doneOnTime: statusesprerodsub.filter(status => status === "done on time").length,
+            delay: statusesprerodsub.filter(status => status === "delay").length
+        };
+        var dataValuesprerodsub = [
+            statusCountsprerodsub.ongoing,
+            statusCountsprerodsub.doneOnTime,
+            statusCountsprerodsub.doneDelay,
+            statusCountsprerodsub.delay
+        ];
+        var totalprerodsub = dataValuesprerodsub.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+        var ctx = document.getElementById('myPieChartvprerodsub').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuesprerodsub,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuesprerodsub[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalprerodsub ? ((value / totalprerodsub) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Prepare data for the chart ROD RELEASED
+        var statusesrodrel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.ROD_RELEASE_STATUS)));
+        var statusCountsrodrel = {
+            ongoing: statusesrodrel.filter(status => status === "ongoing").length,
+            doneDelay: statusesrodrel.filter(status => status === "done delay").length,
+            doneOnTime: statusesrodrel.filter(status => status === "done on time").length,
+            delay: statusesrodrel.filter(status => status === "delay").length
+        };
+        var dataValuesrodrel = [
+            statusCountsrodrel.ongoing,
+            statusCountsrodrel.doneOnTime,
+            statusCountsrodrel.doneDelay,
+            statusCountsrodrel.delay
+        ];
+        var totalrodrel = dataValuesrodrel.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+        var ctx = document.getElementById('myPieChartrodrealed').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuesrodrel,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuesrodrel[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalrodrel ? ((value / totalrodrel) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+            // Prepare data for the chart PRE- ASSESSOR SUBMISSION
+        var statusespreasssub = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.PRE_ASSESSOR_SUBMISSION_STATUS)));
+            var statusCountspreasssub = {
+            ongoing: statusespreasssub.filter(status => status === "ongoing").length,
+            doneOnTime: statusespreasssub.filter(status => status === "done on time").length,
+            doneDelay: statusespreasssub.filter(status => status === "done delay").length,
+            delay: statusespreasssub.filter(status => status === "delay").length
+        };
+            var dataValuespreasssub = [
+            statusCountspreasssub.ongoing,
+            statusCountspreasssub.doneOnTime,
+            statusCountspreasssub.doneDelay,
+            statusCountspreasssub.delay
+        ];
+            var totalpreasssub = dataValuespreasssub.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+            var ctx = document.getElementById('myPieChartpreassessorsub').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuespreasssub,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuespreasssub[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalpreasssub ? ((value / totalpreasssub) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+            // Prepare data for the chart ASSESSOR RELEASED
+        var statusesassrel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.ASSESSOR_RELEASE_STATUS)));
+            var statusCountsassrel = {
+            ongoing: statusesassrel.filter(status => status === "ongoing").length,
+            doneDelay: statusesassrel.filter(status => status === "done delay").length,
+            doneOnTime: statusesassrel.filter(status => status === "done on time").length,
+            delay: statusesassrel.filter(status => status === "delay").length
+        };
+            var dataValuesassrel = [
+            statusCountsassrel.ongoing,
+            statusCountsassrel.doneOnTime,
+            statusCountsassrel.doneDelay,
+            statusCountsassrel.delay
+        ];
+            var totalassrel = dataValuesassrel.reduce((acc, val) => acc + val, 0); // Total number of statuses
+        // Create the donut chart
+            var ctx = document.getElementById('myPieChartassessorreleased').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ongoing', 'Done On Time', 'Done Delayed', 'Delayed'],
+                datasets: [{
+                    data: dataValuesassrel,
+                    backgroundColor: ['#acc3e8', '#b9ebda', '#d9e6b3', '#e8acac'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = dataValuesassrel[tooltipItem.dataIndex]; // Get the value of the current status
+                                const percentage = totalassrel ? ((value / totalassrel) * 100).toFixed() : 0; // Calculate percentage
+                                return `${percentage}%`; // Return percentage in the tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+    </script>
+
+}

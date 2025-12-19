@@ -1,0 +1,235 @@
+﻿@model AttendanceManagementSystem.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+    //WebSecurity.CreateUserAndAccount("00001723", "123456");
+}
+
+<div class="page-header">
+    <h1>
+        User Registrations
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <!-- PAGE CONTENT BEGINS -->
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+            @*<div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Please select employee </label>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(model => model.Company, new SelectList(ViewBag.employee, "Value", "Text"), "----Please select Employee Name----", new { @class = "chosen-select form-control", id = "Employee", style = "width: 100%" })
+                </div>
+            </div>*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Username </label>
+                <div class="col-sm-9">
+                    <input type="text" id="UserName" name="UserName" placeholder="Username" class="col-xs-10 col-sm-5">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Email </label>
+                <div class="col-sm-9">
+                    <input type="text" id="Email" placeholder="Email" class="col-xs-10 col-sm-5">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Password </label>
+                <div class="col-sm-9">
+                    <input type="text" id="Password" name="Password" placeholder="Password" class="col-xs-10 col-sm-5" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Confirm Password </label>
+                <div class="col-sm-9">
+                    <input type="Password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" class="col-xs-10 col-sm-5" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="form-group" center>
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Access Type </label>
+                <div class="col-sm-9">
+                    <select name="AccessType" id="AccessType" class="col-xs-10 col-sm-5">
+                        <option>----Please select Access Type----</option>
+                        <option value="1">Administrator</option>
+                        <option value="2">Admin</option>
+                        <option value="3">User</option>
+                    </select>
+                </div>
+                <br />
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-info" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Submit
+                </button>
+                <button class="btn btn-grey" type="button">
+                    <i class="ace-icon glyphicon glyphicon-refresh"></i>
+                    Reset
+                </button>
+            </div>
+        }
+        <div class="hr hr-18 dotted hr-double"></div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="header smaller lighter blue">User Listing</h3>
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div class="table-header">
+                    Results for "Latest Registered Domains"
+                </div>
+                <div>
+                    <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="center">USERNAME</th>
+                                <th class="center">NAME</th>
+                                <th class="center">COMPANY</th>
+                                <th class="center">DEPARTMENT</th>
+                                <th class="center">EMAIL</th>
+                                <th class="center">ACCESS TYPE</th>
+                                <th class="center">ACTION STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var cis in ViewBag.Users)
+                                {
+                                    var fullname = cis.lname + ", " + cis.fname + ", " + cis.mname;
+                                    <tr>
+                                        <td style="text-align:center">
+                                            <label>
+                                                @cis.username
+                                            </label>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <label>
+                                                @fullname
+                                            </label>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <label>
+                                                @cis.company
+                                            </label>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <label>
+                                                @cis.department
+                                            </label>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <label>
+                                                @cis.email
+                                            </label>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <label>
+                                                @if (cis.accesstype == 1)
+                                                {<span class="label label-primary">Administrator</span>}
+                                                else if (cis.accesstype == 2)
+                                                { <span class="label label-warning">Admin</span>}
+                                                else if (cis.accesstype == 3)
+                                                { <span class="label label-pink">User</span>}
+                                            </label>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <button type="button" class="btn btn-xs btn btn-info btn-round getUserPass" id="@cis.username" data-toggle="modal" data-target="#ModalChangedPass">
+                                                <i class="ace-icon fa fa-exchange"></i>
+                                                Changed Password
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn btn-pink btn-round getAccessType" data-toggle="modal" data-target="#ModalChangedAccess" id="@cis.accesstype*cis.id">
+                                                <i class="ace-icon fa fa-pencil-square-o"></i>
+                                                Edit Accesstype
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+            $('#dynamic-table').DataTable();
+
+            $(".getUserPass").click(function () {
+                var User = this.id;
+                $("#UserAccount").val(User);
+            });
+
+            $("#Employee").change(function () {
+                //var Employee = $("#Employee").val();
+                //var split = Employee.split("*");
+                //$("#UserName").val(split[1]);
+                //$("#Company").val(split[2]);
+                //$("#Department").val(split[3]);
+
+                var Employee = $("#Employee").val();
+                $("#UserName").val(Employee);
+
+            });
+
+            //Get User Password
+            $(".getAccessType").click(function () {
+                var id = this.id;
+                var splits = id.split('*');
+                var UpdatedAccessType = splits[0];
+                var EditIDAccessType = splits[1];
+                $("#UpdatedAccessType").val(UpdatedAccessType);
+                $("#EditIDAccessType").val(EditIDAccessType);
+            });
+            //Update User Password
+            $("#updateAccessType").click(function () {
+                var Acc = $("#UpdatedAccessType").val();
+                var ID = $("#EditIDAccessType").val();
+                var url = "/Account/UpdateAccessType"
+                $.post(url, { id: ID, acc: Acc, }, function (data) {
+                    if (data == "updateaccesstype") {
+                        alert("Successfully Update.");
+                        location.reload();
+                    }
+                    else {
+                        alert(data);
+                    }
+                });
+            });
+
+
+            if (!ace.vars['touch']) {
+                $('.chosen-select').chosen({ allow_single_deselect: true });
+
+                $(document).on('settings.ace.chosen', function (e, event_name, event_val) {
+                    if (event_name != 'sidebar_collapsed') return;
+                    $('.chosen-select').each(function () {
+                        var $this = $(this);
+                        $this.next().css({ 'width': $this.parent().width() });
+                    })
+                });
+            }
+
+
+        });
+
+    </script>
+}
+

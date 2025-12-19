@@ -1,0 +1,329 @@
+﻿@model AttendanceManagementSystem.Models.RegisterModel
+@{
+    ViewBag.Title = "CreateUserRegistration";
+}
+
+<body class="background-White" style="background-color:white">
+    <div class="widget-body" style="background-color:white">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="widget-box widget-color-blue3" style="margin:3%">
+                    <div class="widget-header widget-header-flat">
+                        <h4 class="widget-title">Create User Registration</h4>
+                    </div>
+                    <div class="profile-user-info-striped" style="margin:1%">
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"><label id="employeehide" style="color:red">*</label><small>Name</small></div>
+                            <div class="profile-info-value">
+                                @Html.DropDownListFor(model => model.Company, new SelectList(ViewBag.employee, "Value", "Text"), "---Select Member Name---", new { @class = "form-control chosen-select", id = "Customer_fullname", style = "color: black; width:435%" })
+                            </div>
+                            <input type="text" id="Fullname" name="Fullname" class="form-control" style="display:none">                            
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"><label id="usernamehide" style="color: red">*</label><small>Life Number</small></div>
+                            <div class="profile-info-value">
+                                <input type="text" id="UserName" name="UserName" placeholder="Username" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"><label id="usernamehide" style="color: red">*</label><small>Position</small></div>
+                            <div class="profile-info-value">
+                                <input type="text" id="Position" name="Position" placeholder="Position" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="profile-info-row" style="display:nones">
+                            <div class="profile-info-name"><label id="usernamehide" style="color: red">*</label><small>Zion</small></div>
+                            <div class="profile-info-value">
+                                <input type="text" id="Company" name="Company" placeholder="Company" value="Talisay Zion" class="form-control" readonly>
+                                <input type="text" id="Department" name="Department" placeholder="Department" value="TZ" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"><label id="usernamehide" style="color: red">*</label><small>Gender</small></div>
+                            <div class="profile-info-value">
+                                <input type="text" id="Gender" name="Gender" placeholder="Gender" class="form-control">
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"><label id="emailhide" style="color: red">*</label><small>Email</small></div>
+                            <div class="profile-info-value">
+                                <input type="email" id="Email" name="Email" placeholder="Email" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="profile-info-row center">
+                            <div class="profile-info-name"></div>
+                            <div class="profile-info-value center">
+                                <button class="btn btn-info center no-hover" id="CreateUserRegistration" type="button">
+                                    <i class="ace-icon fa fa-check bigger-110"></i>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile4" class="tab-pane">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="widget-box widget-color-blue3">
+                        <div class="widget-header widget-header-flat">
+                            <h4 class="widget-title">Summary</h4>
+                        </div>
+                        <div>
+                            <table id="UserRegisterEmployeeTable" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="center" hidden></th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Life Number</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Name</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Zion</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Email</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Position</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">ACTION STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="UserRegisterEmployeeTableBody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+            $("#Customer_fullname").change(function () {
+                if ($("#Customer_fullname").val() != "") {
+                    document.getElementById("employeehide").style.display = "none";
+                    document.getElementById("usernamehide").style.display = "none";
+                }
+            });
+
+            $("#Email").keyup(function () {
+                if ($("#Email").val() != "") {
+                    document.getElementById("emailhide").style.display = "none";
+                }
+                else {
+                    document.getElementById("emailhide").style.display = "block";
+                }
+            });
+
+            ////DataTable
+            //$('#UserRegisterEmployee').DataTable();
+
+            // Call the API to get Position Holder
+            $.ajax({
+                url: "/Account/GetEmployeeList", // URL to your controller action
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    // Example: Loop through the data and append it to the table
+                    var table = $("#UserRegisterEmployeeTable tbody");
+                    table.empty(); // Clear existing data
+
+                    $.each(data, function (index, position) {
+                        // Convert the date_hired field
+                        table.append(
+                            "<tr>" +
+                            "<td hidden>" + position.idno + "</td>" +
+                            "<td class='center'>" + position.idno + "</td>" +
+                            "<td class='center'>" + position.fname + "</td>" +
+                            "<td class='center'>" + position.company + "</td>" +
+                            "<td class='center'>" + position.email + "</td>" +
+                            "<td class='center'>" + position.emp_status + "</td>" +
+                            // Add Edit button to open modal
+                            "<td class='center'><button class='editPositionHolderBtn btn btn-info' data-id='" + position.idno + "'><i class='fa fa-edit'></i> Edit</button></td>" +
+                            "</tr>"
+                        );
+                    });
+
+                    // Initialize DataTables
+                    $("#UserRegisterEmployeeTable").DataTable();
+
+                    // Add click event for Edit button to open the modal
+                    $(".UserRegisterEmployeeTableBody").on("click", ".editPositionHolderBtn", function () {
+                        var positionHolderId = $(this).data("id");
+                        // Find the selected employee data (you can fetch the data again or use the existing data)
+                        var selectedpositionholder = data.find(emp => emp.id === positionHolderId);
+                        // Populate the modal fields with employee data
+                        $("#EditPositionHolderId").val(selectedpositionholder.id);
+                        $("#EditPosition").val(selectedpositionholder.position);
+                        // Open the modal
+                        $("#EditPositionHolderModal").modal('show');
+                    });
+
+                    //Save changes button in the modal
+                    $("#saveChangesPositionHolder").click(function () {
+                        var updatedpositionholder = {
+                            id: $("#EditPositionHolderId").val(),
+                            position: $("#EditPosition").val(),
+                        };
+                        // Make an API call to save the changes (you'll need to implement this in your backend)
+                        $.ajax({
+                            url: "/Zion/UpdatePositionHolder", // Change this to your actual update endpoint
+                            method: "POST",
+                            data: updatedpositionholder,
+                            success: function (response) {
+                                Swal.fire(
+                                    'Position updated successfully!',
+                                    'Please clicked the button!',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error updating position:", error);
+                            }
+                        });
+                    });
+
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+
+
+            $("#Employee").change(function () {
+                var UsersName = $("#Employee").val();
+                $("#UserName").val(UsersName);
+            });
+
+            //Save User Registration Username
+            $("#CreateUserRegistration").click(function () {
+                var Username = $("#UserName").val(); // ✅ fixed ID
+                var fname = $("#Fullname").val();
+                var mname = $("#Middlename").val() || "";
+                var lname = $("#Lastname").val() || "";
+                var Company = $("#Company").val();
+                var Gender = $("#Gender").val();
+                var Positions = $("#Position").val();
+                var Department = $("#Department").val();
+                var Email = $("#Email").val();
+
+                if (Username !== "" && Gender !== "" && Email !== "") {
+                    var url = "/Account/Save_CreateUserRegistration";
+                    $.post(url, {
+                        lifenumber: Username, // ✅ sends correct value now
+                        fname: fname,
+                        mname: mname,
+                        lname: lname,
+                        company: Company,
+                        gender: Gender,
+                        position: Positions,
+                        department: Department,
+                        email: Email
+                    }, function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Successfully Saved!',
+                                text: data.message
+                            }).then(function () {
+                                location.reload();
+                                $("#FormPositionHolder")[0].reset();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message
+                            });
+                        }
+                    }, "json");
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Required all details.'
+                    });
+                }
+            });
+
+            if (!ace.vars['touch']) {
+                $('.chosen-select').chosen({ allow_single_deselect: true });
+
+                $(document).on('settings.ace.chosen', function (e, event_name, event_val) {
+                    if (event_name != 'sidebar_collapsed') return;
+                    $('.chosen-select').each(function () {
+                        var $this = $(this);
+                        $this.next().css({ 'width': $this.parent().width() });
+                    })
+                });
+            }
+
+            $("#changedpassword").tooltip({
+                hide: {
+                    effect: "explode",
+                }
+            });
+
+            $("#Customer_fullname").change(function () {
+                var Customer_fullname = $("#Customer_fullname").val();
+                var split = Customer_fullname.split("*");
+                $("#UserName").val(split[0]);
+                $("#Position").val(split[1]);
+                $("#Fullname").val(split[2]);
+            });
+
+        });
+
+        $(window).load(function () {
+            // executes when complete page is fully loaded, including all frames, objects and images
+            GetCustomers();
+        });
+
+        ////Get Information
+        //function myFunctions(id) {
+        //    $.ajax({
+        //        type: "Get",
+        //        url: '../Account/EmpDetails_View?id=' + id,
+        //        success: function (customers) {
+        //            $.each(customers, function (i, customer) {
+        //                $("#EditIDInfo").val(customer.id);
+        //                $("#EditUsername").val(customer.username);
+        //                $("#EditFullname").val(customer.fname + " " + customer.mname + ". " + customer.lname);
+        //                $("#EditCompany").val(customer.company);
+        //                $("#EditDepartment").val(customer.department);
+        //                $("#EditInfoEmail").val(customer.email);
+        //                $("#EditAccesstype").val(customer.accesstype);
+        //            });
+        //        }
+        //    });
+        //}
+        ////Update Information
+        //$("#updateInfortion").click(function () {
+        //    var Email = $("#EditInfoEmail").val();
+        //    var Access = $("#EditAccesstype").val();
+        //    var ID = $("#EditIDInfo").val();
+        //    var url = "/Account/UpdateInformation"
+        //    $.post(url, { id: ID, eml: Email, acc: Access }, function (data) {
+        //        if (data == "updateinfo") {
+        //            Swal.fire(
+        //                'Successfully Update!',
+        //                'Please clicked the button!',
+        //                'success'
+        //            ).then(function () {
+        //                location.reload();
+        //            });
+        //        }
+        //        else {
+        //            alert(data);
+        //        }
+        //    });
+        //});
+
+    </script>
+}

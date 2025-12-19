@@ -1,0 +1,674 @@
+﻿@model AttendanceManagementSystem.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<body class="background-White" style="background-color:white">
+    <div class="widget-body" style="background-color:white">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="widget-box widget-color-blue3" style="margin:3%">
+                    <div class="widget-header widget-header-flat">
+                        <h4 class="widget-title">Create User Registration</h4>
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary()
+                        <div class="profile-user-info-striped" style="margin:1%">
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"><label id="employeehide" style="color:red">*</label><small>EMPLOYEE</small></div>
+                                <div class="profile-info-value">
+                                    @Html.DropDownListFor(
+                                        model => model.Company,
+                                        ViewBag.register != null
+                                            ? new SelectList(ViewBag.register, "Value", "Text")
+                                            : Enumerable.Empty<SelectListItem>(),
+                                        "---Select Employee Name---",
+                                        new { @class = "form-control chosen-select", id = "Customer_fullname", style = "color: black; width:435%" }
+                                    )
+                                </div>
+
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"><label id="usernamehide" style="color: red">*</label><small>USERNAME</small></div>
+                                <div class="profile-info-value">
+                                    <input type="text" id="UserName" name="UserName" placeholder="Username" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"><label id="emailhide" style="color: red">*</label><small>EMAIL</small></div>
+                                <div class="profile-info-value">
+                                    <input type="email" id="Email" name="Email" placeholder="Email" class="form-control" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"><label id="passwordhide" style="color: red">*</label><small>PASSWORD</small></div>
+                                <div class="profile-info-value">
+                                    <input type="password" id="Password" name="Password" placeholder="Password" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"><label id="confirmpasswordhide" style="color: red">*</label><small>CONFIRM PASSWORD</small></div>
+                                <div class="profile-info-value">
+                                    <input type="Password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"><label id="accsesstypehide" style="color: red">*</label><small>ACCESS TYPE</small></div>
+                                <div class="profile-info-value">
+                                    <select name="AccessType" id="AccessType" class="form-control">
+                                        <option>----Please select Access Type----</option>
+                                        <option value="1">Administrator</option>
+                                        <option value="2">User</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="profile-info-row center">
+                                <div class="profile-info-name"></div>
+                                <div class="profile-info-value center">
+                                    <button class="btn btn-info center no-hover" id="Test" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="profile4" class="tab-pane">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="widget-box widget-color-blue3">
+                        <div class="widget-header widget-header-flat">
+                            <h4 class="widget-title">Summary</h4>
+                        </div>
+                        <div>
+                            <table id="UserRegisterEmployee" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="center" hidden></th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">UserID</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Employee Name</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Company</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Email</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">Department</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">ACCESS TYPE</th>
+                                        <th class="center" style="background-color: cornflowerblue;color:black">ACTION STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int count = 100000;
+                                        foreach (var cis in ViewBag.Users)
+                                        {
+                                            count += cis.id;
+                                            var fullname = cis.fname;
+                                            <tr>
+                                                <td class="center" hidden>
+                                                    <label>
+                                                        @count
+                                                    </label>
+                                                </td>
+                                                <td style="text-align:left">
+                                                    <label>
+                                                        @cis.username
+                                                    </label>
+                                                </td>
+                                                <td style="text-align: left">
+                                                    <label>
+                                                        @fullname
+                                                    </label>
+                                                </td>
+                                                <td style="text-align: left">
+                                                    <label>
+                                                        @cis.company
+                                                    </label>
+                                                </td>
+                                                <td style="text-align: left">
+                                                    <label>
+                                                        @cis.email
+                                                    </label>
+                                                </td>
+                                                <td style="text-align: left">
+                                                    <label>
+                                                        @cis.department
+                                                    </label>
+                                                </td>
+                                                <td style="text-align: left">
+                                                    @if (cis.accesstype == 1)
+                                                    {
+                                                        <label class="center" style="color:blue">Administrator</label>
+                                                    }
+                                                    @if (cis.accesstype == 2)
+                                                    {
+                                                        <label class="center" style="color:darkorange">User</label>
+                                                    }
+                                                    @if (cis.accesstype == 3)
+                                                    {
+                                                        <label class="center" style="color:darkred">Approver</label>
+                                                    }
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <div class="pull-center">
+                                                        <a class="btn btn-xs btn btn-pink btn-round no-hover getUserPass" data-toggle="modal" data-target="#ModalChangedPass" id="@cis.id*@cis.username">
+                                                            Changed Password
+                                                        </a>
+                                                        @*<a class="btn btn-xs btn-white btn-info btn-round no-hover getAccessType" style="color: lightskyblue" data-toggle="modal" data-target="#ModalChangedAccess" id="@cis.id@cis.accesstype">
+                                                            Changed Accesstype
+                                                        </a>
+                                                        <a class="btn btn-xs btn-info btn-info btn-round no-hover getEmail" style="color: lightskyblue" data-toggle="modal" data-target="#ModalUpdateEmail" id="@cis.id@cis.email">
+                                                            Edit Email
+                                                        </a>*@
+                                                        <a class="btn btn-xs btn-info btn-info btn-round no-hover getInformation" style="color: lightskyblue" data-toggle="modal" data-target="#ModalChangedInformation" onclick="myFunctions(@cis.id)">
+                                                            Changed Information
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal Edit Changed Password-->
+        <div class="modal fade" id="ModalChangedPass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title" id="exampleModalLabel">Change Password Form</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="form-group center">
+                                <label class="col-sm-3" for="form-field-1"> Username </label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="UserAccount" name="UserAccount" class="col-xs-10 col-sm-9" disabled>
+                                </div>
+                                <br>
+                            </div>
+                            <br />
+                            <div class="form-group center">
+                                <label class="col-sm-3" for="form-field-1"><label id="currentpassword" style="color:red">*</label>Current Password </label>
+                                <div class="col-sm-9">
+                                    <input type="password" id="OldPassword" name="OldPassword" class="col-xs-10 col-sm-9" autocomplete="off">
+                                    <label id="warningfieldcurrentpassword" style="color:red; display:none">Please input this field!</label>
+                                </div>
+                                <br>
+                            </div>
+                            <br />
+                            <div class="form-group center">
+                                <label class="col-sm-3" for="form-field-1"><label id="newpassword" style="color:red">*</label>New Password </label>
+                                <div class="col-sm-9">
+                                    <input type="password" id="NewPassword" name="NewPassword" class="col-xs-10 col-sm-9" autocomplete="off">
+                                    <label id="warningfieldnewpassword" style="color:red; display:none">Please input this field!</label>
+                                </div>
+                                <br>
+                            </div>
+                            <br />
+                            <div class="form-group" style="display:none">
+                                <label for="recipient-name" class="col-form-label">ID:</label>
+                                <input type="text" class="form-control" id="EditIDchangedpass">
+                            </div>
+                        </form>
+                        <div class="form-actions center">
+                            <button class="btn btn-info" id="changedpassword">
+                                Change password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal Edit Access type
+    <div class="modal fade" id="ModalChangedAccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Access Type</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">Access Type:</label>
+                            <div class="col-sm-12">
+                                <select name="UpdatedAccessType" id="UpdatedAccessType" class="col-xs-12">
+                                    <option> </option>
+                                    <option value="1">Administrator</option>
+                                    <option value="2">User</option>
+                                    <option value="3">Approver</option>
+                                </select>
+                            </div>
+                            <br />
+                            <br />
+                        </div>
+                        <br />
+                        <div class="form-group" style="display:none">
+                            <label for="recipient-name" class="col-form-label">ID:</label>
+                            <input type="text" class="form-control" id="EditIDAccessType">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info btn-sm tooltip-info" data-rel="tooltip" data-placement="bottom" data-original-title="Bottm Info" id="updateAccessType">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+        <!--Modal Edit Email
+    <div class="modal fade" id="ModalUpdateEmail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Email</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">Email:</label>
+                            <div class="col-sm-12">
+                                <input type="email" id="EditEmail" name="EditEmail" value="" class="col-xs-12 col-sm-12">
+                            </div>
+                            <br />
+                            <br />
+                        </div>
+                        <br />
+                        <div class="form-group" style="display:none">
+                            <label for="recipient-name" class="col-form-label">ID:</label>
+                            <input type="text" class="form-control" id="EditIDEmail">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info btn-sm tooltip-info" data-rel="tooltip" data-placement="bottom" data-original-title="Bottm Info" id="updateEmail">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+        <!--Modal Edit Information-->
+        <div class="modal fade" id="ModalChangedInformation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" style="text-align:left" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Information</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">UserID:</label>
+                                <div class="col-sm-12">
+                                    <input type="email" id="EditUsername" name="EditUsername" value="" class="form-control col-xs-12 col-sm-12" readonly>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">Employee Name:</label>
+                                <div class="col-sm-12">
+                                    <input type="email" id="EditFullname" name="EditFullname" value="" class="form-control col-xs-12 col-sm-12" readonly>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">Company:</label>
+                                <div class="col-sm-12">
+                                    <input type="email" id="EditCompany" name="EditCompany" value="" class="form-control col-xs-12 col-sm-12" readonly>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">Department:</label>
+                                <div class="col-sm-12">
+                                    <input type="email" id="EditDepartment" name="EditDepartment" value="" class="form-control col-xs-12 col-sm-12" readonly>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">Email:</label>
+                                <div class="col-sm-12">
+                                    <input type="email" id="EditInfoEmail" name="EditInfoEmail" value="" class="form-control col-xs-12 col-sm-12">
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">Access Type:</label>
+                                <div class="col-sm-12">
+                                    <select name="EditAccesstype" id="EditAccesstype" class="form-control col-xs-12">
+                                        <option> </option>
+                                        <option value="1">Administrator</option>
+                                        <option value="2">User</option>
+                                        <option value="3">Approver</option>
+                                    </select>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+                            </div>
+                            <br />
+                            <div class="form-group" style="display:none">
+                                <label for="recipient-name" class="col-form-label">ID:</label>
+                                <input type="text" class="form-control" id="EditIDInfo">
+                            </div>
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info btn-sm tooltip-info" data-rel="tooltip" data-placement="bottom" data-original-title="Bottm Info" id="updateInfortion">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#Customer_fullname").change(function () {
+                var Customer_fullname = $("#Customer_fullname").val();
+                var split = Customer_fullname.split("*");
+                $("#UserName").val(split[0]);
+                $("#Email").val(split[1]);
+            });
+
+            $("#Customer_fullname").change(function () {
+            if ($("#Customer_fullname").val() != "") {
+                document.getElementById("employeehide").style.display = "none"; 
+                document.getElementById("usernamehide").style.display = "none";
+                }
+            });
+
+            $("#Email").keyup(function () {
+                if ($("#Email").val() != "") {
+                    document.getElementById("emailhide").style.display = "none";
+                }
+                else {
+                    document.getElementById("emailhide").style.display = "block";
+                }
+            });
+
+            $("#Password").keyup(function () {
+                if ($("#Password").val() != "") {
+                    document.getElementById("passwordhide").style.display = "none";
+                }
+                else {
+                    document.getElementById("passwordhide").style.display = "block";
+                }
+            });
+
+            $("#ConfirmPassword").keyup(function () {
+                if ($("#ConfirmPassword").val() != "") {
+                    document.getElementById("confirmpasswordhide").style.display = "none";
+                }
+                else {
+                    document.getElementById("confirmpasswordhide").style.display = "block";
+                }
+            });
+
+            $("#AccessType").click(function () {
+                if ($("#AccessType").val() != "") {
+                    document.getElementById("accsesstypehide").style.display = "none";
+                }
+                else {
+                    document.getElementById("accsesstypehide").style.display = "block";
+                }
+            });
+
+            //DataTable
+            $('#UserRegisterEmployee').DataTable();
+
+            $("#Employee").change(function () {
+                var UsersName = $("#Employee").val();
+                $("#UserName").val(UsersName);
+            });
+
+            $("#Test").click(function () {
+                var Username = $("#UserName").val();
+                var Password = $("#Password").val();
+                var Employee = $("#Customer_fullname").val();
+                if (Username != "" && Password != "" && Employee != "") {
+                    location.reload();
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Dont empty this field!',
+                    })
+                }
+            });
+
+            $(".getUserPass").click(function () {
+                var User = this.id;
+                var splits = User.split('*');
+                var UserAccount = splits[1];
+                var EditIDchangedpass = splits[2];
+                $("#UserAccount").val(UserAccount);
+                $("#EditIDchangedpass").val(EditIDchangedpass);
+            });
+            // User changed Password
+            $("#changedpassword").click(function () {
+                var Username = $("#UserAccount").val();
+                var OldPass = $("#OldPassword").val();
+                var NewPass = $("#NewPassword").val();
+                var url = "/Account/changepass"
+                if ($("#OldPassword").val() == "" && $("#NewPassword").val() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Dont empty this field!',  
+                    }).then(function () {
+                        $("#warningfieldcurrentpassword").show();
+                        $("#warningfieldnewpassword").show();
+                        $("#currentpassword").show();
+                        $("#newpassword").show();
+                    }).then(function () {
+                        $("#OldPassword").keyup(function () {
+                            if ($("#OldPassword").val() != "") {
+                                $("#warningfieldcurrentpassword").hide();
+                                $("#currentpassword").hide();
+                            }
+                            else {
+                                $("#warningfieldcurrentpassword").show();
+                                $("#currentpassword").show();
+                            }
+                        });
+                        $("#NewPassword").keyup(function () {
+                            if ($("#NewPassword").val() != "") {
+                                $("#warningfieldnewpassword").hide();
+                                $("#newpassword").hide();
+                            }
+                            else {
+                                $("#warningfieldnewpassword").show();
+                                $("#newpassword").show();
+                            }
+                        });
+                    })
+                }
+                else {
+                    Swal.fire({
+                        title: 'Do you really want to Changed your Password?',
+                        showDenyButton: true,
+                        confirmButtonText: 'Yes',
+                        denyButtonText: `No`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.post(url, { idno: Username, oldpassword: OldPass, newpassword: NewPass }, function (data) {
+                                Swal.fire(
+                                    'Successfully changed Password!',
+                                    'Please clicked the button!',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            });
+                        } else if (result.isDenied) {
+                            Swal.fire('This Password was not Changed', '', 'info').then(function () {
+                                location.reload();
+                            })
+                        }
+                    })
+                }                
+            });
+
+            ////Get Access type
+            //$(".getAccessType").click(function () {
+            //    var id = this.id;
+            //    var splits = id.split('*');
+            //    var EditIDAccessType = splits[0];
+            //    var UpdatedAccessType = splits[1];
+            //    $("#EditIDAccessType").val(EditIDAccessType);
+            //    $("#UpdatedAccessType").val(UpdatedAccessType);
+            //});
+            ////Update Access type
+            //$("#updateAccessType").click(function () {
+            //    var Acc = $("#UpdatedAccessType").val();
+            //    var ID = $("#EditIDAccessType").val();
+            //    var url = "/Account/UpdateAccessType"
+            //    $.post(url, { id: ID, acc: Acc }, function (data) {
+            //        if (data == "updateaccesstype") {
+            //            Swal.fire(
+            //                'Successfully Update!',
+            //                'Please clicked the button!',
+            //                'success'
+            //            ).then(function () {
+            //                location.reload();
+            //            });
+            //        }
+            //        else {
+            //            alert(data);
+            //        }
+            //    });
+            //});
+
+            //Get Access type
+            //$(".getEmail").click(function () {
+            //    var id = this.id;
+            //    var splits = id.split('*');
+            //    var EditIDEmail = splits[0];
+            //    var EditEmail = splits[1];
+            //    $("#EditIDEmail").val(EditIDEmail);
+            //    $("#EditEmail").val(EditEmail);
+            //});
+            ////Update Email
+            //$("#updateEmail").click(function () {
+            //    var Email = $("#EditEmail").val();
+            //    var ID = $("#EditIDEmail").val();
+            //    var url = "/Account/UpdateEmails"
+            //    $.post(url, { id: ID, eml: Email }, function (data) {
+            //        if (data == "updateemail") {
+            //            Swal.fire(
+            //                'Successfully Update!',
+            //                'Please clicked the button!',
+            //                'success'
+            //            ).then(function () {
+            //                location.reload();
+            //            });
+            //        }
+            //        else {
+            //            alert(data);
+            //        }
+            //    });
+            //});
+
+            if (!ace.vars['touch']) {
+                $('.chosen-select').chosen({ allow_single_deselect: true });
+
+                $(document).on('settings.ace.chosen', function (e, event_name, event_val) {
+                    if (event_name != 'sidebar_collapsed') return;
+                    $('.chosen-select').each(function () {
+                        var $this = $(this);
+                        $this.next().css({ 'width': $this.parent().width() });
+                    })
+                });
+            }
+
+            $("#changedpassword").tooltip({
+                hide: {
+                    effect: "explode",
+                }
+            });
+
+            //$("#Customer_fullname").change(function () {
+            //    var Customer_fullname = $("#Customer_fullname").val();
+            //    $("#UserName").val(Customer_fullname);
+            //});
+
+        });
+
+        $(window).load(function () {
+            // executes when complete page is fully loaded, including all frames, objects and images
+            GetCustomers();
+        });
+
+        //Get Information
+        function myFunctions(id) {
+            $.ajax({
+                type: "Get",
+                url: '../Account/EmpDetails_View?id=' + id,
+                success: function (customers) {
+                    $.each(customers, function (i, customer) {
+                        $("#EditIDInfo").val(customer.id);
+                        $("#EditUsername").val(customer.username);
+                        $("#EditFullname").val(customer.fname + " " + customer.mname + ". " + customer.lname);
+                        $("#EditCompany").val(customer.company);
+                        $("#EditDepartment").val(customer.department);
+                        $("#EditInfoEmail").val(customer.email);
+                        $("#EditAccesstype").val(customer.accesstype);
+                    });
+                }
+            });
+        }
+        //Update Information
+        $("#updateInfortion").click(function () {
+            var Email = $("#EditInfoEmail").val();
+            var Access = $("#EditAccesstype").val();
+            var ID = $("#EditIDInfo").val();
+            var url = "/Account/UpdateInformation"
+            $.post(url, { id: ID, eml: Email, acc: Access }, function (data) {
+                if (data == "updateinfo") {
+                    Swal.fire(
+                        'Successfully Update!',
+                        'Please clicked the button!',
+                        'success'
+                    ).then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    alert(data);
+                }
+            });
+        });
+
+    </script>
+}
